@@ -17,6 +17,27 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Install correct version of mingw
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install mingw --version=11.2.0  -y
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          host: windows
+          target: "desktop"
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ env.MINGW_VERSION }}
+          dir: "${{github.workspace}}/qt"
+          install-deps: "true"
+      - name: Set Qt path and refresh
+        run: |
+          echo "${{github.workspace}}/qt/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          refreshenv
+          #Write-Output (Get-Command g++.exe).Path
+          #g++.exe --version
+
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
@@ -36,10 +57,13 @@ jobs:
           curl -sSLo $HOME\.sonar\build-wrapper.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
           unzip -o $HOME\.sonar\build-wrapper.zip -d $HOME\.sonar\
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+      - name: Run qmake
+        run: |
+          ls
+          qmake ./HurrigatorsProject.pro -spec win32-g++
+          ls
       - name: Run build-wrapper
         run: |
-          echo $PWD
-          qmake ./HurrigatorsProject.pro -spec win32-g++
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make qmake_all
       - name: Run sonar-scanner
         env:
