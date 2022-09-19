@@ -18,10 +18,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: Install correct version of mingw
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install mingw --version=11.2.0  -y
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
