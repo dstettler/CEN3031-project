@@ -24,7 +24,7 @@ jobs:
           host: windows
           target: "desktop"
           version: ${{ env.QT_VERSION }}
-          arch: ${{ env.MINGW_VERSION }}
+          arch: "win64_msvc2019_64"
           dir: "${{github.workspace}}/qt"
           install-deps: "true"
       - name: Set Qt path and refresh
