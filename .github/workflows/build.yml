@@ -39,7 +39,8 @@ jobs:
       - name: Run build-wrapper
         run: |
           echo $PWD
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} qmake ./HurrigatorsProject.pro -spec win32-g++ && mingw32-make qmake_all
+          qmake ./HurrigatorsProject.pro -spec win32-g++
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make qmake_all
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
