@@ -9,17 +9,17 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp
+    source/main.cpp \
+    source/mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    headers/mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    forms/mainwindow.ui
 
 TRANSLATIONS += \
-    HurrigatorsProject_en_US.ts
+    locales/HurrigatorsProject_en_US.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 

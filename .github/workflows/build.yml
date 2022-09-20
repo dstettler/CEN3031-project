@@ -56,9 +56,7 @@ jobs:
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       - name: Run qmake
         run: |
-          ls
           qmake ./HurrigatorsProject.pro -spec win32-g++
-          ls
       - name: Run build-wrapper
         run: |
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
