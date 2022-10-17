@@ -71,3 +71,5 @@ Thumbs.db
 *.dll
 *.exe
 
+# Allow lib binaries to avoid having to deal with porting between developers (REMOVE THIS AT A LATER DATE)
+!lib/*

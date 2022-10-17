@@ -28,3 +28,21 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout.dll
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout.dlld
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_client_qt.dll
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_client_qt.dlld
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dll
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dlld
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
