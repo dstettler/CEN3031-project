@@ -73,3 +73,7 @@ Thumbs.db
 
 # Allow lib binaries to avoid having to deal with porting between developers (REMOVE THIS AT A LATER DATE)
 !lib/*
+
+# Avoid scary macOS-specific
+*/.DS_Store
+.DS_Store
