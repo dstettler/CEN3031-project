@@ -8,11 +8,13 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    source/databridge.cpp \
     source/maprenderer.cpp \
     source/main.cpp \
     source/mainwindow.cpp
 
 HEADERS += \
+    headers/databridge.h \
     headers/mainwindow.h \
     headers/maprenderer.h
 
@@ -29,20 +31,18 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout.dll
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout.dlld
+
+win32: LIBS += -L$$PWD/lib/ -llibosmscout.dll
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_client_qt.dll
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_client_qt.dlld
+win32: LIBS += -L$$PWD/lib/ -llibosmscout_client_qt.dll
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dll
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dlld
+win32: LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dll
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
