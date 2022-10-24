@@ -46,3 +46,18 @@ win32: LIBS += -L$$PWD/lib/ -llibosmscout_map_qt.dll
 
 INCLUDEPATH += $$PWD/.
 DEPENDPATH += $$PWD/.
+
+mac: LIBS += -F$$PWD/lib/ -framework OSMScout
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+mac: LIBS += -F$$PWD/lib/ -framework OSMScoutClientQt
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+mac: LIBS += -F$$PWD/lib/ -framework OSMScoutMapQt
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
