@@ -9,14 +9,16 @@ CONFIG += c++11
 
 SOURCES += \
     source/databridge.cpp \
+    source/libosmhandler.cpp \
     source/maprenderer.cpp \
     source/main.cpp \
-    source/mainwindow.cpp
+    source/mainwindow.cpp \
 
 HEADERS += \
     headers/databridge.h \
     headers/mainwindow.h \
-    headers/maprenderer.h
+    headers/maprenderer.h \
+    headers/libosmhandler.h
 
 FORMS += \
     forms/mainwindow.ui
