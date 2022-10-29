@@ -56,7 +56,7 @@ jobs:
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       - name: Run cmake
         run: |
-        ls D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3
+          ls D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3 &&
           cmake -G "Ninja"
       - name: Run build-wrapper
         run: |
