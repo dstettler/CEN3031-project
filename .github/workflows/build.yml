@@ -54,9 +54,9 @@ jobs:
           curl -sSLo $HOME\.sonar\build-wrapper.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
           unzip -o $HOME\.sonar\build-wrapper.zip -d $HOME\.sonar\
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
-      - name: Run qmake
+      - name: Run cmake
         run: |
-          qmake ./HurrigatorsProject.pro -spec win32-g++
+          cmake -G "Ninja"
       - name: Run build-wrapper
         run: |
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
