@@ -19,9 +19,8 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 
 # Leaving these in place in case they're needed for debugging
-# message(WARNING ${QT_MINIMUM_VERSION})
-# message(WARNING ${QT_VERSION_MAJOR})
-# message(WARNING ${QT_VERSION_MINOR})
+message(WARNING ${QT_VERSION_MAJOR})
+message(WARNING ${QT_VERSION_MINOR})
 
 # Finding the components, ditto what I said below when linking OpenGL
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui OpenGLWidgets)
