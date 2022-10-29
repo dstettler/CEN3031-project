@@ -11,7 +11,7 @@ set(QT_MINIMUM_VERSION 6.3)
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt 6
 # at the moment for some reason
-set(CMAKE_PREFIX_PATH "D:/Qt/6.3.2/mingw_64/lib/cmake")
+set(CMAKE_PREFIX_PATH "D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3/mingw_64/lib/cmake")
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
