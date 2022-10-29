@@ -3,8 +3,9 @@
 #include <QLibrary>
 
 LibOsmHandler::LibOsmHandler(QString mlp, QString qcp, QString qmp)
-{
-    this->mainLibPath = mlp;
-    this->qtClientPath = qcp;
-    this->qtMapPath = qmp;
-}
+    :
+      mainLibPath(mlp),
+      qtClientPath(qcp),
+      qtMapPath(qmp)
+{}
+

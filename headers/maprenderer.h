@@ -12,7 +12,7 @@ class MapRenderer
     QSharedPointer<QOpenGLWidget> openglNode;
 
 public:
-    MapRenderer(QSharedPointer<QOpenGLWidget> openglNode);
+    explicit MapRenderer(QSharedPointer<QOpenGLWidget> openglNode);
 };
 
 #endif // MAPRENDERER_H
