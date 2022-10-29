@@ -77,3 +77,7 @@ Thumbs.db
 # Avoid scary macOS-specific
 */.DS_Store
 .DS_Store
+
+# Hide cmake junk
+build
+CMakeLists.txt.user
