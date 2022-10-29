@@ -57,10 +57,10 @@ jobs:
       - name: Run cmake
         run: |
           ls D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3 &&
-          cmake -G "Ninja"
+          cmake -G "Ninja" -B build 
       - name: Run build-wrapper
         run: |
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make
+          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
