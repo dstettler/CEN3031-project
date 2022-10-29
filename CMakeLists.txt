@@ -6,7 +6,7 @@ set(CMAKE_AUTOUIC ON)
 
 # This makes it harder to compile libosmscout but also I don't care
 # (libosmscout is built with Qt 5 but needs to be recursively built from this)
-set(QT_MINIMUM_VERSION 6.3)
+set(QT_MINIMUM_VERSION 6.2)
 
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt 6
