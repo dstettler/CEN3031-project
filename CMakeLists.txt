@@ -29,7 +29,7 @@ set(QT_MINIMUM_VERSION 6.2)
 # at the moment for some reason
 # Also including a Qt5 path just in case temporarily
 list(APPEND CMAKE_PREFIX_PATH "D:/Qt/6.3.2/mingw_64/lib/cmake")
-#list(APPEND CMAKE_PREFIX_PATH "D:/Qt/5.15.2/mingw81_64/lib/cmake")
+list(APPEND CMAKE_PREFIX_PATH "D:/Qt/5.15.2/mingw81_64/lib/cmake")
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
@@ -94,7 +94,7 @@ target_link_libraries(HurrigatorsProject PRIVATE
 )
 
 # Link libosmscout
-#target_link_libraries(HurrigatorsProject PRIVATE OSMScout)
+target_link_libraries(HurrigatorsProject PRIVATE OSMScout)
 
 set_target_properties(HurrigatorsProject PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
