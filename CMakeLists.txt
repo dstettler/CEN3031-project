@@ -31,7 +31,7 @@ find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 # message(WARNING ${QT_VERSION_MINOR})
 
 # Finding the components, ditto what I said below when linking OpenGL
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui OpenGLWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui OpenGLWidgets Xml)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
 
 # Manually add all headers and sources here since this is a relatively small project
@@ -77,6 +77,7 @@ target_link_libraries(HurrigatorsProject PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::OpenGLWidgets
+    Qt${QT_VERSION_MAJOR}::Xml
 )
 
 set_target_properties(HurrigatorsProject PROPERTIES

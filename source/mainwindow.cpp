@@ -3,6 +3,7 @@
 #include "headers/rendereropenglwidget.h"
 
 #include "ui_mainwindow.h"
+#include "headers/databridge.h"
 
 #include <QMessageBox>
 #include <QSharedPointer>
@@ -30,6 +31,7 @@ void MainWindow::onWindowShown()
     // Now that the QOpenGLWidget has been initialized we can give the MapRenderer its pointer
     mapRenderer.updateOpenGLNode(QSharedPointer<RendererOpenGLWidget>(ui->openGLWidget));
     mapRenderer.updateImage();
+    DataBridge d("test.xml");
 }
 
 MainWindow::~MainWindow()
