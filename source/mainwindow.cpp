@@ -31,7 +31,7 @@ void MainWindow::onWindowShown()
     // Now that the QOpenGLWidget has been initialized we can give the MapRenderer its pointer
     mapRenderer.updateOpenGLNode(QSharedPointer<RendererOpenGLWidget>(ui->openGLWidget));
     mapRenderer.updateImage();
-    DataBridge d("test.xml");
+    DataBridge d("C:/Users/piyum/Downloads/test.xml");
 }
 
 MainWindow::~MainWindow()
