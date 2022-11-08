@@ -39,6 +39,7 @@ include_directories(headers)
 # Find libosmscout files
 add_subdirectory(lib/libosmscout)
 
+# Find Qt packages after building libosmscout
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 
 # Leaving these in place in case they're needed for debugging
