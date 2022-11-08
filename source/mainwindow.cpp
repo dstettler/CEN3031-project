@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    DataBridge d("test.xml");
+    DataBridge d("C:/Users/piyum/Downloads/test.xml");
 }
 
 MainWindow::~MainWindow()
