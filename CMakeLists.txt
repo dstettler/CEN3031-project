@@ -17,10 +17,11 @@ set(QT_MINIMUM_VERSION 6.2)
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt 6
 # at the moment for some reason
-set(CMAKE_PREFIX_PATH "D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3/mingw_64/lib/cmake")
+set(CMAKE_PREFIX_PATH "C:/Qt/6.3.2/mingw_64/lib/cmake")
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 
@@ -41,12 +42,16 @@ set(PROJECT_SOURCES
     headers/mainwindow.h
     headers/maprenderer.h
 
+    headers/rendereropenglwidget.h
+
     source/databridge.cpp
     source/libosmhandler.cpp
     source/main.cpp
     source/mainwindow.cpp
     source/maprenderer.cpp
 )
+
+qt_wrap_ui(SOURCES forms/mainwindow.ui)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(HurrigatorsProject
