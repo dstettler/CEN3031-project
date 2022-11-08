@@ -34,8 +34,6 @@ void DataBridge::ReadXMLFile(QString fileName)
             {
                 qDebug() << "In if statement";
 
-                //qDebug() << Component.text();
-
                 // Get the first child of the component
                 QDomElement Child=Component.firstChild().toElement();
 
@@ -53,10 +51,11 @@ void DataBridge::ReadXMLFile(QString fileName)
                             if (Gchild.tagName() == "LineString")
                             {
                                 qDebug() << "coordinates time";
-                                qDebug() << Gchild.firstChild().toElement().text();
+
+                                //Stores the coordinates in a string, will parse later on for each set of coord.
                                 trackCoordinates = Gchild.firstChild().toElement().text();
+
                                 qDebug() << trackCoordinates;
-                                //maybe Qstring isnt the best way to store coordinates at this point?
                             }
                             if (Gchild.tagName() == "ExtendedData")
                             {
@@ -79,6 +78,5 @@ void DataBridge::ReadXMLFile(QString fileName)
 
 DataBridge::DataBridge(QString fileName)
 {
-    qDebug() << "la la";
     ReadXMLFile(fileName);
 }
