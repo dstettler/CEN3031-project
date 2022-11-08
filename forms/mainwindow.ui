@@ -46,7 +46,7 @@
   <customwidget>
    <class>RendererOpenGLWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header>headers/rendereropenglwidget.h</header>
+   <header>rendereropenglwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

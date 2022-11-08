@@ -1,20 +1,35 @@
 #include "headers/mainwindow.h"
 #include "headers/maprenderer.h"
+#include "headers/rendereropenglwidget.h"
+
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
 #include <QSharedPointer>
-#include <QOpenGLWidget>
-
-void test();
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mapRenderer()
 {
     ui->setupUi(this);
 
-    QSharedPointer<QOpenGLWidget> openglWidget = QSharedPointer<QOpenGLWidget>(ui->openGLWidget);
-    MapRenderer m(openglWidget);
+    // Signal and slot to ensure events are not called until everything has been initialized
+    connect(this, windowShown, this, onWindowShown);
+}
+
+void MainWindow::show()
+{
+    QMainWindow::show();
+    QApplication::processEvents();
+    emit windowShown();
+}
+
+void MainWindow::onWindowShown()
+{
+    // Now that the QOpenGLWidget has been initialized we can give the MapRenderer its pointer
+    mapRenderer.updateOpenGLNode(QSharedPointer<RendererOpenGLWidget>(ui->openGLWidget));
+    mapRenderer.updateImage();
 }
 
 MainWindow::~MainWindow()

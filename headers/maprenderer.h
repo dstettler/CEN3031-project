@@ -5,14 +5,27 @@
 #include <QPixmap>
 #include <QSharedPointer>
 #include <QOpenGLWidget>
+#include <QPair>
+
+#include "headers/rendereropenglwidget.h"
 
 class MapRenderer
 {
     QVector<QPixmap> layers;
-    QSharedPointer<QOpenGLWidget> openglNode;
+    QPixmap composite;
+    
+    QPair<int, int> openGLNodeSize;
+
+    QSharedPointer<RendererOpenGLWidget> openGLNode;
+
+    void generateCompositeFromLayers();
 
 public:
-    explicit MapRenderer(QSharedPointer<QOpenGLWidget> openglNode);
+    explicit MapRenderer();
+    void addLayer(QPixmap pixmap);
+    bool updateLayer(unsigned int layer, QPixmap newPixmap);
+    void updateImage();
+    void updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode);
 };
 
 #endif // MAPRENDERER_H
