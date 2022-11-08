@@ -54,8 +54,8 @@ void DataBridge::ReadXMLFile(QString fileName)
                             {
                                 qDebug() << "coordinates time";
                                 qDebug() << Gchild.firstChild().toElement().text();
-                                trackCoordinates = Gchild.firstChild().toText().data();
-                                qDebug() << trackCoordinates.toStdString().c_str();
+                                trackCoordinates = Gchild.firstChild().toElement().text();
+                                qDebug() << trackCoordinates;
                                 //maybe Qstring isnt the best way to store coordinates at this point?
                             }
                             if (Gchild.tagName() == "ExtendedData")
