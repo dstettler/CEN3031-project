@@ -2,9 +2,21 @@
 #define DATABRIDGE_H
 #include <QString>
 #include <QVector>
+#include <QPair>
 
 class DataBridge
 {
+    struct TrackPoint
+    {
+        QString coordinates;
+        QString time;
+        QPair<QString,QString> location;
+        int maxWindMPH;
+        int windGusts;
+        QString motion;
+        int minPressure;
+    };
+
 public:
     DataBridge(QString fileName);
 
