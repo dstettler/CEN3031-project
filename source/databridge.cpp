@@ -5,7 +5,75 @@
 #include <QDomDocument>
 #include <QtXml>
 
-void DataBridge::ReadXMLFile(QString fileName)
+void DataBridge::ReadConeFile(QString fileName)
+{
+    //The QDomDocument class represents an XML document.
+    QDomDocument xmlBOM;
+
+    // Load xml file as raw data
+    QFile file(fileName);
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        // Set data into the QDomDocument before processing
+
+        xmlBOM.setContent(&file);
+
+        QDomElement root=xmlBOM.documentElement();
+
+        QDomElement Component=root.firstChild().firstChild().toElement();
+        qDebug() << "In file";
+
+        while (!Component.isNull())
+        {
+            qDebug() << "In while loop";
+            qDebug() << Component.tagName();
+
+            // Get the first child of the component
+            QDomElement Child=Component.firstChild().toElement();
+
+            // WORK ON THIS
+            qDebug() << Child.tagName();
+
+            break;
+
+            // Read each child of the component node
+            while (!Child.isNull())
+            {
+
+            }
+
+        }
+    }
+}
+
+void DataBridge::ReadWarningsFile(QString fileName)
+{
+    //The QDomDocument class represents an XML document.
+    QDomDocument xmlBOM;
+
+    // Load xml file as raw data
+    QFile file(fileName);
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        // Set data into the QDomDocument before processing
+
+        xmlBOM.setContent(&file);
+
+        QDomElement root=xmlBOM.documentElement();
+
+        QDomElement Component=root.firstChild().firstChild().toElement();
+        qDebug() << "In file";
+
+        while (!Component.isNull())
+        {
+
+        }
+    }
+}
+
+void DataBridge::ReadTrackFile(QString fileName)
 {
     //The QDomDocument class represents an XML document.
     QDomDocument xmlBOM;
@@ -56,6 +124,7 @@ void DataBridge::ReadXMLFile(QString fileName)
                                 trackCoordinates = Gchild.firstChild().toElement().text();
 
                                 qDebug() << trackCoordinates;
+
                             }
                             if (Gchild.tagName() == "ExtendedData")
                             {
@@ -78,5 +147,6 @@ void DataBridge::ReadXMLFile(QString fileName)
 
 DataBridge::DataBridge(QString fileName)
 {
-    ReadXMLFile(fileName);
+    //ReadTrackFile(fileName);
+    ReadConeFile(fileName);
 }

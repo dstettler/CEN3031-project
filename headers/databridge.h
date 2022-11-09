@@ -22,6 +22,8 @@ public:
 
 private:
     void ReadXMLFile(QString fileName);
+    void ReadConeFile(QString fileName);
+    void ReadWarningsFile(QString fileName);
     QString trackCoordinates;
 };
 
