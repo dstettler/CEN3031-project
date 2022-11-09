@@ -7,7 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     DataBridge d("C:/Users/piyum/Downloads/test.xml");
+    //DataBridge d("/Users/johnnyhuynh/Downloads/ConeTest.xml");
 }
 
 MainWindow::~MainWindow()
