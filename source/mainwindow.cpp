@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Signal and slot to ensure events are not called until everything has been initialized
-    connect(this, windowShown, this, onWindowShown);
+    connect(this, &MainWindow::windowShown, this, &MainWindow::onWindowShown);
 }
 
 void MainWindow::show()
