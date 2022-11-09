@@ -16,8 +16,7 @@ void RendererOpenGLWidget::paintGL()
         QPainter _painter(this);
         _painter.setPen(Qt::red);
         
-        // Slight margin, will remove after the demo
-        QRectF _target(10.0, 10.0, 10+width(), 10+height());
+        QRectF _target(0.0, 0.0, width(), height());
         QRectF _source(0.0, 0.0, composite.width(), composite.height());
         
         _painter.drawPixmap(_target, composite, _source);
