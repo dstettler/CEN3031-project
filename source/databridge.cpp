@@ -16,33 +16,98 @@ void DataBridge::ReadConeFile(QString fileName)
     if (file.open(QIODevice::ReadOnly))
     {
         // Set data into the QDomDocument before processing
-
         xmlBOM.setContent(&file);
 
         QDomElement root=xmlBOM.documentElement();
 
         QDomElement Component=root.firstChild().firstChild().toElement();
-        qDebug() << "In file";
 
         while (!Component.isNull())
         {
-            qDebug() << "In while loop";
-            qDebug() << Component.tagName();
-
-            // Get the first child of the component
-            QDomElement Child=Component.firstChild().toElement();
-
-            // WORK ON THIS
-            qDebug() << Child.tagName();
-
-            break;
-
-            // Read each child of the component node
-            while (!Child.isNull())
+            if (Component.tagName() == "Placemark")
             {
+                // Get the first child of the component
+                QDomElement Child = Component.firstChild().toElement();
 
+                // Read each child of the component node
+                while (!Child.isNull())
+                {
+                    if (Child.tagName() == "Polygon")
+                    {
+                        QDomElement Gchild = Child.firstChild().toElement();
+
+                        while (!Gchild.isNull())
+                        {
+                            if (Gchild.tagName() == "outerBoundaryIs")
+                            {
+                                //Stores the coordinates in a string, will parse later on for each set of coord.
+                                coneString = Gchild.firstChild().toElement().text();
+
+                                //Varirables (for loop)
+                                int _commaCount = 0;
+                                QString xCoord = "";
+                                QString yCoord = "";
+                                QString zCoord = "";
+
+                                //Parses the string to get individual set of coordinates
+                                for (int i = 0; i < coneString.length() - 1; i++)
+                                {
+                                    if (coneString[i] == ' ')
+                                    {
+                                        continue;
+                                    }
+
+                                    if (coneString[i] == ',')
+                                    {
+                                        _commaCount++;
+                                    }
+
+                                    if (_commaCount == 0 && coneString[i].isDigit() || _commaCount == 0 && coneString[i] != ' ' && coneString[i] != ',')
+                                    {
+                                        if (coneString[i] != '\n')
+                                        {
+                                            xCoord += coneString[i];
+                                        }
+                                    }
+
+                                    if (_commaCount == 1 && coneString[i].isDigit() || _commaCount == 1 && coneString[i] != ' ' && coneString[i] != ',')
+                                    {
+                                        yCoord += coneString[i];
+                                    }
+
+                                    if (_commaCount == 2 && coneString[i].isDigit() || _commaCount == 2 && coneString != ' ' && coneString[i] != ',')
+                                    {
+                                        zCoord += coneString[i];
+
+                                        if (coneString[i + 1] == ' ')
+                                        {
+                                            _commaCount = 3;
+                                        }
+                                    }
+
+                                    if (_commaCount == 3)
+                                    {
+                                        coneCoordinatesVector.push_back(ConePoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+
+                                        //Reset coordinates
+                                        xCoord = "";
+                                        yCoord = "";
+                                        zCoord = "";
+
+                                        //Reset _commacount
+                                        _commaCount = 0;
+                                    }
+
+                                }
+                            }
+                          Gchild = Gchild.nextSibling().toElement();
+                        }
+                        break;
+                    }
+                    Child = Child.nextSibling().toElement();
+                }
             }
-
+          Component = Component.nextSibling().toElement();
         }
     }
 }
@@ -149,4 +214,5 @@ DataBridge::DataBridge(QString fileName)
 {
     //ReadTrackFile(fileName);
     ReadConeFile(fileName);
+    //ReadWarningsFile(fileName);
 }

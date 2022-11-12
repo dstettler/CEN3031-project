@@ -6,6 +6,7 @@
 
 class DataBridge
 {
+    //TrackPoint object to store information about each point on the track
     struct TrackPoint
     {
         QString coordinates;
@@ -17,14 +18,35 @@ class DataBridge
         int minPressure;
     };
 
+    //ConePoint object to store coordinates of each point for cone
+    struct ConePoint
+    {
+        //Constructor
+        ConePoint(float x, float y, float z)
+        {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
+
+        float x;
+        float y;
+        float z;
+    };
+
 public:
     DataBridge(QString fileName);
 
 private:
-    void ReadXMLFile(QString fileName);
+    //Functions
+    void ReadTrackFile(QString fileName);
     void ReadConeFile(QString fileName);
     void ReadWarningsFile(QString fileName);
+
+    //Variables
     QString trackCoordinates;
+    QString coneString;
+    QVector<ConePoint> coneCoordinatesVector;
 };
 
 #endif // DATABRIDGE_H
