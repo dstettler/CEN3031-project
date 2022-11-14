@@ -102,12 +102,12 @@ void DataBridge::ReadConeFile(QString fileName)
                             }
                           Gchild = Gchild.nextSibling().toElement();
                         }
-
+                        /*
                         for (int i = 0; i < coneCoordinatesVector.size(); i++)
                         {
                             qDebug() << coneCoordinatesVector[i].x << " " << coneCoordinatesVector[i].y << " " << coneCoordinatesVector[i].z;
                         }
-
+                        */
                         break;
                     }
                     Child = Child.nextSibling().toElement();
