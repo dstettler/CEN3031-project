@@ -129,11 +129,106 @@ void DataBridge::ReadWarningsFile(QString fileName)
         QDomElement root=xmlBOM.documentElement();
 
         QDomElement Component=root.firstChild().firstChild().toElement();
-        qDebug() << "In file";
+        //qDebug() << "In file";
 
         while (!Component.isNull())
         {
+            //qDebug() << "In while loop";
+            //qDebug() << Component.tagName();
+            if (Component.tagName() == "Placemark")
+            {   //warnings files have several placemark components w different coordinates. Data in each is stored in a separate "WarningsPlacemark" struct. The structs are all stored in a vector
+                //the name is stored in case we need to differentiate b/w watches n warnings
+                //advisory date coz it may be helpful
+                //coordinates vector stored using the same coordinate struct used in ReadConeFile
+                //the variables are declared here so that each iteration can store new data
+                //qDebug() << "we here";
+                QString warningName;
+                QString warningsCoordinatesString;
+                QVector<ConePoint> warningsCoordinatesVector;
+                QString advisoryDate;
 
+                QDomElement Child=Component.firstChild().toElement();
+
+                while (!Child.isNull())
+                {
+                    if (Child.tagName() == "name")
+                    {
+                          warningName = Child.toElement().text();
+                          //qDebug() << warningName;
+                    }
+                    if (Child.tagName() == "LineString")
+                    {   //usd Johnny's code from readConeFile
+                        warningsCoordinatesString = Child.firstChild().toElement().text();
+
+                        //Varirables (for loop)
+                        int _commaCount = 0;
+                        QString xCoord = "";
+                        QString yCoord = "";
+                        QString zCoord = "";
+
+                        //Parses the string to get individual set of coordinates
+                        for (int i = 0; i < warningsCoordinatesString.length() - 1; i++)
+                        {
+                            if (warningsCoordinatesString[i] == ' ')
+                            {
+                                continue;
+                            }
+
+                            if (warningsCoordinatesString[i] == ',')
+                            {
+                                _commaCount++;
+                            }
+
+                            if (_commaCount == 0 && warningsCoordinatesString[i].isDigit() || _commaCount == 0 && warningsCoordinatesString[i] != ' ' && warningsCoordinatesString[i] != ',')
+                            {
+                                if (warningsCoordinatesString[i] != '\n')
+                                {
+                                    xCoord += warningsCoordinatesString[i];
+                                }
+                            }
+
+                            if (_commaCount == 1 && warningsCoordinatesString[i].isDigit() || _commaCount == 1 && warningsCoordinatesString[i] != ' ' && warningsCoordinatesString[i] != ',')
+                            {
+                                yCoord += warningsCoordinatesString[i];
+                            }
+
+                            if (_commaCount == 2 && warningsCoordinatesString[i].isDigit() || _commaCount == 2 && warningsCoordinatesString != ' ' && warningsCoordinatesString[i] != ',')
+                            {
+                                zCoord += warningsCoordinatesString[i];
+
+                                if (warningsCoordinatesString[i + 1] == ' ')
+                                {
+                                    _commaCount = 3;
+                                }
+                            }
+
+                            if (_commaCount == 3)
+                            {
+                                warningsCoordinatesVector.push_back(ConePoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+
+                                //Reset coordinates
+                                xCoord = "";
+                                yCoord = "";
+                                zCoord = "";
+
+                                //Reset _commacount
+                                _commaCount = 0;
+                            }
+                        }
+                    }
+                    if (Child.tagName() == "ExtendedData")
+                    {   //all children of extendedData are tagnamed data
+                        QDomElement Gchild = Child.firstChild().toElement();
+                        advisoryDate = Gchild.nextSibling().nextSibling().toElement().text();   //third sibling is advisorydate
+                        //if more data needed, add here
+                    }
+                    Child = Child.nextSibling().toElement();
+                }
+                //create struct and add to vector of structs
+                warningsData.push_back(WarningsPlacemark(warningName, advisoryDate, warningsCoordinatesVector));
+
+            }
+            Component = Component.nextSibling().toElement();
         }
     }
 }
@@ -213,6 +308,24 @@ void DataBridge::ReadTrackFile(QString fileName)
 DataBridge::DataBridge(QString fileName)
 {
     //ReadTrackFile(fileName);
-    ReadConeFile(fileName);
-    //ReadWarningsFile(fileName);
+    //ReadConeFile(fileName);
+    ReadWarningsFile(fileName);
+
+    /*testing for wanrings
+    for (int i = 0; i < warningsData.size(); i++)
+    {
+        qDebug() << warningsData[i].warningName;
+        qDebug() << "|";
+        qDebug() << warningsData[i].advisoryDate;
+        qDebug() << "|";
+        for (int j = 0; j < warningsData[i].warningsCoordinatesVector.size(); j++)
+        {
+            qDebug() << warningsData[i].warningsCoordinatesVector[j].x;
+            qDebug() << "";
+            qDebug() << warningsData[i].warningsCoordinatesVector[j].y;
+            qDebug() << "";
+            qDebug() << warningsData[i].warningsCoordinatesVector[j].z;
+            qDebug() << "";
+        }
+    }*/
 }
