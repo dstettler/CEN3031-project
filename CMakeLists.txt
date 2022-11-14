@@ -21,6 +21,8 @@ set(CMAKE_PREFIX_PATH "D:/a/hurrigators-project/hurrigators-project/qt/Qt/6.2.3/
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(headers)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 
@@ -40,6 +42,9 @@ set(PROJECT_SOURCES
     headers/libosmhandler.h
     headers/mainwindow.h
     headers/maprenderer.h
+
+    headers/rendereropenglwidget.h
+    source/rendereropenglwidget.cpp
 
     source/databridge.cpp
     source/libosmhandler.cpp
