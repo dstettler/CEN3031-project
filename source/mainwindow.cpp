@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //DataBridge d("C:/Users/piyum/Downloads/test.xml");
-    DataBridge d("/Users/johnnyhuynh/Downloads/ConeTest.xml");
+    DataBridge d("C:/Users/piyum/Downloads/0warnings.xml");
+    //DataBridge d("/Users/johnnyhuynh/Downloads/ConeTest.xml");
 }
 
 MainWindow::~MainWindow()

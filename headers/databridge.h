@@ -34,6 +34,23 @@ class DataBridge
         float z;
     };
 
+    struct WarningsPlacemark
+    {
+        QString warningName;
+        QString advisoryDate;
+        QVector<ConePoint> warningsCoordinatesVector;
+
+        //constructor
+        WarningsPlacemark(QString warningName, QString advisoryDate, QVector<ConePoint>& _warningsCoordinatesVector)
+        {
+            this->warningName = warningName;
+            this->advisoryDate = advisoryDate;
+            for (int i = 0; i < _warningsCoordinatesVector.size(); i++)
+                warningsCoordinatesVector.push_back(_warningsCoordinatesVector[i]);
+
+        }
+    };
+
 public:
     DataBridge(QString fileName);
 
@@ -47,6 +64,7 @@ private:
     QString trackCoordinates;
     QString coneString;
     QVector<ConePoint> coneCoordinatesVector;
+    QVector<WarningsPlacemark> warningsData;
 };
 
 #endif // DATABRIDGE_H
