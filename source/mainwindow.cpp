@@ -30,6 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
         QString _fileName = QDir::currentPath() + "/ConeTest.xml";
     #endif
 
+    /* Notes for how to change file paths
+     * If you are windows the only thing you change is inside the quotes under "//For Windows"
+     * You have to move the file manually into a folder called build-hurrigators-project...etc, (PICK MOST RECENT DATE) same level as hurrigators-project
+     * Make sure to also change the function call under databridge.cpp
+    */
+
     DataBridge d(_fileName);
 }
 
