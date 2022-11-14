@@ -1,6 +1,9 @@
 #include "headers/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "headers/databridge.h"
+#include <QDir>
+#include <QString>
+#include <QFileInfo>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -8,8 +11,26 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    DataBridge d("C:/Users/piyum/Downloads/0warnings.xml");
-    //DataBridge d("/Users/johnnyhuynh/Downloads/ConeTest.xml");
+    //For Mac
+    #ifdef Q_OS_MACX
+        QDir test(QDir::currentPath());
+
+        //Go up from .app
+        test.cdUp();
+        test.cdUp();
+        test.cdUp();
+
+        QString tempString;
+
+        QFileInfo fi(test, tempString);
+        QString _fileName = fi.canonicalFilePath() + "/ConeTest.xml";
+
+    //For Windows
+    #else
+        QString _fileName = QDir::currentPath() + "/ConeTest.xml";
+    #endif
+
+    DataBridge d(_fileName);
 }
 
 MainWindow::~MainWindow()
