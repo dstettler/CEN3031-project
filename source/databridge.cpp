@@ -102,6 +102,12 @@ void DataBridge::ReadConeFile(QString fileName)
                             }
                           Gchild = Gchild.nextSibling().toElement();
                         }
+
+                        for (int i = 0; i < coneCoordinatesVector.size(); i++)
+                        {
+                            qDebug() << coneCoordinatesVector[i].x << " " << coneCoordinatesVector[i].y << " " << coneCoordinatesVector[i].z;
+                        }
+
                         break;
                     }
                     Child = Child.nextSibling().toElement();
@@ -308,8 +314,8 @@ void DataBridge::ReadTrackFile(QString fileName)
 DataBridge::DataBridge(QString fileName)
 {
     //ReadTrackFile(fileName);
-    //ReadConeFile(fileName);
-    ReadWarningsFile(fileName);
+    ReadConeFile(fileName);
+    //ReadWarningsFile(fileName);
 
     /*testing for wanrings
     for (int i = 0; i < warningsData.size(); i++)

@@ -47,7 +47,6 @@ class DataBridge
             this->advisoryDate = advisoryDate;
             for (int i = 0; i < _warningsCoordinatesVector.size(); i++)
                 warningsCoordinatesVector.push_back(_warningsCoordinatesVector[i]);
-
         }
     };
 
