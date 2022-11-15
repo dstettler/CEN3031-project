@@ -42,17 +42,14 @@ for url_obj in url_obj_list:
     os.mkdir(f"noaa_cache/{i}")
 
     url = url_obj["cone"]
-    url_segments = url.split('/')
     full_path = "noaa_cache/" + str(i) + "/cone.kmz"
     fileoperations.download_file(url, full_path)
 
     url = url_obj["track"]
-    url_segments = url.split('/')
     full_path = "noaa_cache/" + str(i) + "/track.kmz"
     fileoperations.download_file(url, full_path)
   
     url = url_obj["warnings"]
-    url_segments = url.split('/')
     full_path = "noaa_cache/" + str(i) + "/warnings.kmz"
     fileoperations.download_file(url, full_path)
 
