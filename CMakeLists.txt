@@ -115,3 +115,8 @@ install(TARGETS HurrigatorsProject
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(HurrigatorsProject)
 endif()
+
+# Include python files for the kmz crawler
+configure_file(lib/nhc-crawler/main.py main.py COPYONLY)
+configure_file(lib/nhc-crawler/kmzhtmlparser.py kmzhtmlparser.py COPYONLY)
+configure_file(lib/nhc-crawler/fileoperations.py fileoperations.py COPYONLY)
