@@ -1,6 +1,7 @@
-import fileoperations
 import os
 from shutil import rmtree
+
+import fileoperations
 
 if not os.path.exists("noaa_cache"):
         os.mkdir("noaa_cache")

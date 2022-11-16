@@ -1,7 +1,5 @@
 import urllib.request
 import hashlib
-import html.parser
-
 from zipfile import ZipFile
 
 import kmzhtmlparser

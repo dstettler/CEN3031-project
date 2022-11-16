@@ -1,5 +1,4 @@
 from html.parser import HTMLParser
-from html.entities import name2codepoint
 
 class KmzHtmlParser(HTMLParser):
     td_count = 0
