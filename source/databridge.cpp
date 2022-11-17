@@ -256,17 +256,14 @@ void DataBridge::ReadTrackFile(QString fileName)
         QDomElement root=xmlBOM.documentElement();
 
         QDomElement Component=root.firstChild().firstChild().toElement();
-        qDebug() << "In file";
+
 
         while (!Component.isNull())
         {
-            qDebug() << "In while loop";
-            qDebug() << Component.tagName();
             //Check if the tag name is <name
             //track files don't have a tag name named name. haha
             if (Component.tagName() == "Folder")
             {
-                qDebug() << "In if statement";
 
                 // Get the first child of the component
                 QDomElement Child=Component.firstChild().toElement();
@@ -274,32 +271,56 @@ void DataBridge::ReadTrackFile(QString fileName)
                 // Read each child of the component node
                 while (!Child.isNull())
                 {
-                    qDebug() << Child.tagName();
+
                     if (Child.tagName() == "Placemark")
                     {
-                        qDebug() << "in child if statement";
+
                         QDomElement Gchild = Child.firstChild().toElement();
                         while (!Gchild.isNull())
                         {
-                            qDebug() << Gchild.tagName();
+
                             if (Gchild.tagName() == "LineString")
                             {
-                                qDebug() << "coordinates time";
+                                // if the placemark node has a linestring child, we know
+                                // it is not one of the correct placemark nodes to be looking at
+                                // so we break to go to the next sibling placemark
+                                // go to next sibling
+                                break;
+                             }
 
-                                //Stores the coordinates in a string, will parse later on for each set of coord.
-                                trackCoordinates = Gchild.firstChild().toElement().text();
+                             if (Gchild.tagName() == "Point")
+                             {
 
-                                qDebug() << trackCoordinates;
+                                QString track = Gchild.firstChild().toElement().text();
 
-                            }
-                            if (Gchild.tagName() == "ExtendedData")
-                            {
+                                // get x
+                                int delimiter = track.indexOf(",", 0);
+                                QString xCoord = track.mid(0, delimiter);
+                                xCoord.remove(0, 1); // removes extra white space at beginning
+                                track.remove(0, delimiter + 1);
 
-                                qDebug() << "data time";
-                            }
+                                // get y
+                                delimiter = track.indexOf(",", 0);
+                                QString yCoord = track.mid(0, delimiter);
+                                track.remove(0, delimiter + 1);
+
+                                // get z
+                                delimiter = track.indexOf(",", 0);
+                                QString zCoord = track.mid(0, delimiter);
+                                zCoord.remove(zCoord.length() - 1, 1); // removes extra white space at end
+
+                                //convert strings to int
+                                int x = xCoord.toFloat();
+                                int y = yCoord.toFloat();
+                                int z = zCoord.toFloat();
+
+                                //create struct and add to vector of structs
+                                trackCoordinates.push_back(TrackPoint(x, y, z));
+
+                             }
+
                             Gchild = Gchild.nextSibling().toElement();
-                        }
-                        break;
+                        } 
                     }
                     Child = Child.nextSibling().toElement();
                 }
@@ -313,8 +334,8 @@ void DataBridge::ReadTrackFile(QString fileName)
 
 DataBridge::DataBridge(QString fileName)
 {
-    //ReadTrackFile(fileName);
-    ReadConeFile(fileName);
+    ReadTrackFile(fileName);
+    //ReadConeFile(fileName);
     //ReadWarningsFile(fileName);
 
     /*testing for wanrings

@@ -9,13 +9,16 @@ class DataBridge
     //TrackPoint object to store information about each point on the track
     struct TrackPoint
     {
-        QString coordinates;
-        QString time;
-        QPair<QString,QString> location;
-        int maxWindMPH;
-        int windGusts;
-        QString motion;
-        int minPressure;
+        TrackPoint(float x, float y, float z)
+               {
+                   this->x = x;
+                   this->y = y;
+                   this->z = z;
+               }
+
+               float x;
+               float y;
+               float z;
     };
 
     //ConePoint object to store coordinates of each point for cone
@@ -60,7 +63,7 @@ private:
     void ReadWarningsFile(QString fileName);
 
     //Variables
-    QString trackCoordinates;
+    QVector<TrackPoint> trackCoordinates;
     QString coneString;
     QVector<ConePoint> coneCoordinatesVector;
     QVector<WarningsPlacemark> warningsData;
