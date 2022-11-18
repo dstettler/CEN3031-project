@@ -87,7 +87,7 @@ void DataBridge::ReadConeFile(QString fileName)
 
                                     if (_commaCount == 3)
                                     {
-                                        coneCoordinatesVector.push_back(ConePoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+                                        coneCoordinatesVector.push_back(GeoPoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
 
                                         //Reset coordinates
                                         xCoord = "";
@@ -150,7 +150,7 @@ void DataBridge::ReadWarningsFile(QString fileName)
                 //qDebug() << "we here";
                 QString warningName;
                 QString warningsCoordinatesString;
-                QVector<ConePoint> warningsCoordinatesVector;
+                QVector<GeoPoint> warningsCoordinatesVector;
                 QString advisoryDate;
 
                 QDomElement Child=Component.firstChild().toElement();
@@ -210,7 +210,7 @@ void DataBridge::ReadWarningsFile(QString fileName)
 
                             if (_commaCount == 3)
                             {
-                                warningsCoordinatesVector.push_back(ConePoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+                                warningsCoordinatesVector.push_back(GeoPoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
 
                                 //Reset coordinates
                                 xCoord = "";
@@ -315,7 +315,7 @@ void DataBridge::ReadTrackFile(QString fileName)
                                 int z = zCoord.toFloat();
 
                                 //create struct and add to vector of structs
-                                trackCoordinates.push_back(TrackPoint(x, y, z));
+                                trackCoordinates.push_back(GeoPoint(x, y, z));
 
                              }
 
@@ -332,27 +332,17 @@ void DataBridge::ReadTrackFile(QString fileName)
     file.close();
 }
 
-DataBridge::DataBridge(QString fileName)
+QPair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)
+{
+
+}
+
+DataBridge::DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer)
+     :mapRendererPtr(renderer),
+      boundBoxLeft(-89.703, 23.483, 0),
+      boundBoxRight(-72.455, 31.952, 0)
 {
     ReadTrackFile(fileName);
     //ReadConeFile(fileName);
     //ReadWarningsFile(fileName);
-
-    /*testing for wanrings
-    for (int i = 0; i < warningsData.size(); i++)
-    {
-        qDebug() << warningsData[i].warningName;
-        qDebug() << "|";
-        qDebug() << warningsData[i].advisoryDate;
-        qDebug() << "|";
-        for (int j = 0; j < warningsData[i].warningsCoordinatesVector.size(); j++)
-        {
-            qDebug() << warningsData[i].warningsCoordinatesVector[j].x;
-            qDebug() << "";
-            qDebug() << warningsData[i].warningsCoordinatesVector[j].y;
-            qDebug() << "";
-            qDebug() << warningsData[i].warningsCoordinatesVector[j].z;
-            qDebug() << "";
-        }
-    }*/
 }

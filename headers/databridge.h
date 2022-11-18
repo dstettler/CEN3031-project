@@ -3,29 +3,15 @@
 #include <QString>
 #include <QVector>
 #include <QPair>
+#include "headers/maprenderer.h"
 
 class DataBridge
 {
-    //TrackPoint object to store information about each point on the track
-    struct TrackPoint
-    {
-        TrackPoint(float x, float y, float z)
-               {
-                   this->x = x;
-                   this->y = y;
-                   this->z = z;
-               }
-
-               float x;
-               float y;
-               float z;
-    };
-
-    //ConePoint object to store coordinates of each point for cone
-    struct ConePoint
+    //Point object to store coordinates of each point for cone
+    struct GeoPoint
     {
         //Constructor
-        ConePoint(float x, float y, float z)
+        GeoPoint(float x, float y, float z)
         {
             this->x = x;
             this->y = y;
@@ -41,10 +27,10 @@ class DataBridge
     {
         QString warningName;
         QString advisoryDate;
-        QVector<ConePoint> warningsCoordinatesVector;
+        QVector<GeoPoint> warningsCoordinatesVector;
 
         //constructor
-        WarningsPlacemark(QString warningName, QString advisoryDate, QVector<ConePoint>& _warningsCoordinatesVector)
+        WarningsPlacemark(QString warningName, QString advisoryDate, QVector<GeoPoint>& _warningsCoordinatesVector)
         {
             this->warningName = warningName;
             this->advisoryDate = advisoryDate;
@@ -54,19 +40,23 @@ class DataBridge
     };
 
 public:
-    DataBridge(QString fileName);
+    DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer);
 
 private:
     //Functions
     void ReadTrackFile(QString fileName);
     void ReadConeFile(QString fileName);
     void ReadWarningsFile(QString fileName);
+    QPair<float,float> LatLonToScreenCoord(float x, float y);
 
     //Variables
-    QVector<TrackPoint> trackCoordinates;
+    QVector<GeoPoint> trackCoordinates;
     QString coneString;
-    QVector<ConePoint> coneCoordinatesVector;
+    QVector<GeoPoint> coneCoordinatesVector;
     QVector<WarningsPlacemark> warningsData;
+    GeoPoint boundBoxLeft;
+    GeoPoint boundBoxRight;
+    QSharedPointer<MapRenderer> mapRendererPtr;
 };
 
 #endif // DATABRIDGE_H
