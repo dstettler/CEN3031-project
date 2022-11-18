@@ -42,6 +42,7 @@ set(PROJECT_SOURCES
     headers/libosmhandler.h
     headers/mainwindow.h
     headers/maprenderer.h
+    headers/drawing.h
 
     headers/rendereropenglwidget.h
     source/rendereropenglwidget.cpp
@@ -51,6 +52,7 @@ set(PROJECT_SOURCES
     source/main.cpp
     source/mainwindow.cpp
     source/maprenderer.cpp
+    source/drawing.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
