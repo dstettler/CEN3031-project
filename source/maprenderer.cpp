@@ -13,6 +13,13 @@ MapRenderer::MapRenderer()
 
     QPixmap _smile("D:/Documents/GitHub/hurrigators-project/build/smile.png");
     addLayer(_smile);
+
+    openGLNodeSize = QPair<int, int>(0,0);
+}
+
+QPair<int, int> MapRenderer::getOpenGLNodeSize()
+{
+    return openGLNodeSize;
 }
 
 void MapRenderer::updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode)
