@@ -41,21 +41,24 @@ class DataBridge
 
 public:
     DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer);
-
+    QPair<float, float> getBoundBoxLats;
 private:
     //Functions
     void ReadTrackFile(QString fileName);
     void ReadConeFile(QString fileName);
     void ReadWarningsFile(QString fileName);
+    float CoordPerPixel(int widthInPixels);
     QPair<float,float> LatLonToScreenCoord(float x, float y);
 
     //Variables
     QVector<GeoPoint> trackCoordinates;
     QString coneString;
     QVector<GeoPoint> coneCoordinatesVector;
+    QVector<GeoPoint> warningsCoordinatesVector;        //might only need this and not warnings data but lets see, this stores all coordinates
     QVector<WarningsPlacemark> warningsData;
-    GeoPoint boundBoxLeft;
+    GeoPoint boundBoxLeft;  //y is lattitudes, x is longs
     GeoPoint boundBoxRight;
+    int widthInPixels;
     QSharedPointer<MapRenderer> mapRendererPtr;
 };
 

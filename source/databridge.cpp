@@ -150,7 +150,7 @@ void DataBridge::ReadWarningsFile(QString fileName)
                 //qDebug() << "we here";
                 QString warningName;
                 QString warningsCoordinatesString;
-                QVector<GeoPoint> warningsCoordinatesVector;
+                QVector<GeoPoint> _warningsCoordinatesVector;
                 QString advisoryDate;
 
                 QDomElement Child=Component.firstChild().toElement();
@@ -211,6 +211,8 @@ void DataBridge::ReadWarningsFile(QString fileName)
                             if (_commaCount == 3)
                             {
                                 warningsCoordinatesVector.push_back(GeoPoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+                                _warningsCoordinatesVector.push_back(GeoPoint(xCoord.toFloat(), yCoord.toFloat(), zCoord.toFloat()));
+
 
                                 //Reset coordinates
                                 xCoord = "";
@@ -231,7 +233,7 @@ void DataBridge::ReadWarningsFile(QString fileName)
                     Child = Child.nextSibling().toElement();
                 }
                 //create struct and add to vector of structs
-                warningsData.push_back(WarningsPlacemark(warningName, advisoryDate, warningsCoordinatesVector));
+                warningsData.push_back(WarningsPlacemark(warningName, advisoryDate, _warningsCoordinatesVector));
 
             }
             Component = Component.nextSibling().toElement();
@@ -332,17 +334,32 @@ void DataBridge::ReadTrackFile(QString fileName)
     file.close();
 }
 
-QPair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)
+QPair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
 {
+    QPair<float, float> ScreenPoint;
+    ScreenPoint.first = x/CoordPerPixel(widthInPixels);
+    ScreenPoint.second = y/CoordPerPixel(widthInPixels);
+    return ScreenPoint;
+}
 
+float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordinates per screen pixel. width in pixels must be known
+{
+    float CoordPerPixel;
+    float x1 = boundBoxLeft.x;          //left longitude
+    float x2 = boundBoxRight.x;         //right longitude
+
+    CoordPerPixel = (x2 - x1)/widthInPixels;
+    return CoordPerPixel;
 }
 
 DataBridge::DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer)
      :mapRendererPtr(renderer),
       boundBoxLeft(-89.703, 23.483, 0),
       boundBoxRight(-72.455, 31.952, 0)
+      //get width in pixels
 {
     ReadTrackFile(fileName);
     //ReadConeFile(fileName);
     //ReadWarningsFile(fileName);
 }
+
