@@ -1,32 +1,37 @@
 import os
-from shutil import rmtree
+from shutil import rmtree, copyfile
 
 import fileoperations
 
 if not os.path.exists("noaa_cache"):
         os.mkdir("noaa_cache")
 
-fileoperations.download_file("https://www.nhc.noaa.gov/gis/", "noaa_cache/new_nhc.html")
+if not os.path.exists("python/USE_ARCHIVE.txt"):
+    fileoperations.download_file("https://www.nhc.noaa.gov/gis/", "noaa_cache/new_nhc.html")
 
-if os.path.isfile("noaa_cache/nhc.html"):
-    old_hash = fileoperations.check_hash("noaa_cache/nhc.html")
-    new_hash = fileoperations.check_hash("noaa_cache/new_nhc.html")
+    if os.path.isfile("noaa_cache/nhc.html"):
+        old_hash = fileoperations.check_hash("noaa_cache/nhc.html")
+        new_hash = fileoperations.check_hash("noaa_cache/new_nhc.html")
 
-    if old_hash == new_hash:
-        os.remove("noaa_cache/new_nhc.html")
-        print("Hashes match! No need to re-crawl.")
-        quit()
+        if old_hash == new_hash:
+            os.remove("noaa_cache/new_nhc.html")
+            print("Hashes match! No need to re-crawl.")
+            raise KeyboardInterrupt
+        else:
+            print("Data has been updated. Now crawling.")
+            os.remove("noaa_cache/nhc.html")
+            os.rename("noaa_cache/new_nhc.html", "noaa_cache/nhc.html")
+
+            if os.path.isfile("noaa_cache/empty.txt"):
+                os.remove("noaa_cache/empty.txt")
+
     else:
-        print("Data has been updated. Now crawling.")
-        os.remove("noaa_cache/nhc.html")
         os.rename("noaa_cache/new_nhc.html", "noaa_cache/nhc.html")
-
-        if os.path.isfile("noaa_cache/empty.txt"):
-            os.remove("noaa_cache/empty.txt")
-
 else:
-    os.rename("noaa_cache/new_nhc.html", "noaa_cache/nhc.html")
+    if os.path.isfile("noaa_cache/empty.txt"):
+                os.remove("noaa_cache/empty.txt")
 
+    copyfile("python/archive.html", "noaa_cache/nhc.html")
 
 url_obj_list = fileoperations.parse_kmz_from_html("noaa_cache/nhc.html")
 
@@ -46,7 +51,7 @@ if (len(url_obj_list[0]) == 0):
     print("No avaliable kmz files!")
     with open("noaa_cache/empty.txt", "w") as empty_file:
         empty_file.write("NO AVALIABLE HURRICANE DATA!")
-    quit()
+    raise KeyboardInterrupt
 
 # Download files into i directories
 i = 0
