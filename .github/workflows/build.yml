@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           submodules: recursive
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
@@ -29,6 +28,17 @@ jobs:
           arch: win64_mingw
           dir: "${{github.workspace}}/qt"
           install-deps: "true"
+      - name: Setup MSYS/MINGW64
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: "mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-libiconv
+                    mingw-w64-x86_64-cmake mingw-w64-x86_64-extra-cmake-modules mingw-w64-x86_64-ninja
+                    mingw-w64-x86_64-protobuf
+                    mingw-w64-x86_64-libxml2
+                    mingw-w64-x86_64-cairo mingw-w64-x86_64-pango
+                    mingw-w64-x86_64-qt5
+                    mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-glm"
       - name: Set Qt path and refresh
         run: |
           echo "${{github.workspace}}/qt/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
