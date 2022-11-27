@@ -81,3 +81,6 @@ Thumbs.db
 # Hide cmake junk
 build
 CMakeLists.txt.user
+
+# Ignore python stuff
+lib/nhc-crawler/noaa_cache/
