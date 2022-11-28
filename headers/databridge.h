@@ -3,10 +3,12 @@
 #include <QString>
 #include <QVector>
 #include <QPair>
+#include <QSharedPointer>
 #include "headers/maprenderer.h"
 
 class DataBridge
 {
+public:
     //Point object to store coordinates of each point for cone
     struct GeoPoint
     {
@@ -39,9 +41,16 @@ class DataBridge
         }
     };
 
-public:
     DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer);
     QPair<float, float> getBoundBoxLats;
+
+    //Getter functions
+    QSharedPointer<QVector<GeoPoint>> GetTrackCoordinatesVector();
+    QSharedPointer<QVector<GeoPoint>> GetConeCoordinatesVector();
+    QSharedPointer<QVector<GeoPoint>> GetWarningsCoordinatesVector();
+    GeoPoint GetBoundBoxLeft();
+    GeoPoint GetBoundBoxRight();
+
 private:
     //Functions
     void ReadTrackFile(QString fileName);

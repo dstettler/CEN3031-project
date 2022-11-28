@@ -47,11 +47,11 @@ void MainWindow::onWindowShown()
         QString tempString;
 
         QFileInfo fi(test, tempString);
-        QString _fileName = fi.canonicalFilePath() + "/ConeTest.xml";
+        QString _fileName = fi.canonicalFilePath();
 
     //For Windows
     #else
-        QString _fileName = QDir::currentPath() + "/ConeTest.xml";
+        QString _fileName = QDir::currentPath();
     #endif
 
     /* Notes for how to change file paths
@@ -60,7 +60,7 @@ void MainWindow::onWindowShown()
      * Make sure to also change the function call under databridge.cpp
     */
 
-    DataBridge d(_fileName);
+    DataBridge d(_fileName, QSharedPointer<MapRenderer>(&mapRenderer));
 }
 
 MainWindow::~MainWindow()

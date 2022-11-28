@@ -1,10 +1,39 @@
 #include "headers/databridge.h"
 #include <QXmlStreamReader>
 #include <QFile>
+#include <QSharedPointer>
 #include <QMessageBox>
 #include <QDomDocument>
+#include <QVector>
 #include <QtXml>
 
+//---------------------------------------GETTER FUNCTiONS--------------------------------------------------------//
+QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetTrackCoordinatesVector()
+{
+    return QSharedPointer<QVector<GeoPoint>>(&trackCoordinates);
+}
+
+QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetConeCoordinatesVector()
+{
+    return QSharedPointer<QVector<GeoPoint>>(&coneCoordinatesVector);
+}
+
+QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetWarningsCoordinatesVector()
+{
+    return QSharedPointer<QVector<GeoPoint>>(&warningsCoordinatesVector);
+}
+
+DataBridge::GeoPoint DataBridge::GetBoundBoxLeft()
+{
+    return boundBoxLeft;
+}
+
+DataBridge::GeoPoint DataBridge::GetBoundBoxRight()
+{
+    return boundBoxRight;
+}
+
+//---------------------------------------READ CONE, WARNING, WARNINGS FROM FILE----------------------------------//
 void DataBridge::ReadConeFile(QString fileName)
 {
     //The QDomDocument class represents an XML document.
@@ -334,7 +363,8 @@ void DataBridge::ReadTrackFile(QString fileName)
     file.close();
 }
 
-QPair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
+//---------------------------CONVERSION FROM EARTH COORD TO ON-SCREEN COORD-----------------------------//
+Pair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
 {
     QPair<float, float> ScreenPoint;
     ScreenPoint.first = x/CoordPerPixel(widthInPixels);
@@ -352,14 +382,15 @@ float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordi
     return CoordPerPixel;
 }
 
+//-------------------------------------CONSTRUCTOR-----------------------------------------------------//
 DataBridge::DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer)
      :mapRendererPtr(renderer),
       boundBoxLeft(-89.703, 23.483, 0),
       boundBoxRight(-72.455, 31.952, 0)
       //get width in pixels
 {
-    ReadTrackFile(fileName);
-    //ReadConeFile(fileName);
-    //ReadWarningsFile(fileName);
+    ReadTrackFile(fileName + "/ConeTest.xml");
+    //ReadConeFile(fileName + "/ConeTest.xml");
+    //ReadWarningsFile(fileName + "/ConeTest.xml");
 }
 
