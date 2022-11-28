@@ -25,7 +25,7 @@ jobs:
           host: windows
           target: "desktop"
           version: ${{ env.QT_VERSION }}
-          arch: win64_mingw
+          arch: win64_mingw81
           dir: "${{github.workspace}}/qt"
           install-deps: "true"
       - name: Setup MSYS/MINGW64
