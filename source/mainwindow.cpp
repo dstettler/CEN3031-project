@@ -26,7 +26,7 @@ void MainWindow::show()
 {
     QMainWindow::show();
     QApplication::processEvents();
-    emit windowShown();
+    Q_EMIT windowShown();
 }
 
 void MainWindow::onWindowShown()

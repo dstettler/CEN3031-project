@@ -17,10 +17,10 @@ public:
     void show();
     ~MainWindow();
 
-public slots:
+public Q_SLOTS:
     void onWindowShown();
 
-signals:
+Q_SIGNALS:
     void windowShown();
 
 private:
