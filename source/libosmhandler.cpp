@@ -3,11 +3,12 @@
 #include <QLibrary>
 
 #include <osmscout/Database.h>
+#include <osmscoutmap/MapPainter.h>
+#include <osmscoutmapqt/MapPainterQt.h>
 
-LibOsmHandler::LibOsmHandler(QString mlp, QString qcp, QString qmp)
+LibOsmHandler::LibOsmHandler(QString appPath, QSharedPointer<MapRenderer> renderer)
     :
-      mainLibPath(mlp),
-      qtClientPath(qcp),
-      qtMapPath(qmp)
+      appPath(appPath),
+      renderer(renderer)
 {}
 
