@@ -34,7 +34,7 @@ void MapRenderer::addLayer(QPixmap pixmap)
     layers.push_back(pixmap);
 }
 
-bool MapRenderer::updateLayer(unsigned int layer, QPixmap newPixmap)
+bool MapRenderer::updateLayer(MapRenderer::RenderLayer layer, QPixmap newPixmap)
 {
     if (layer < layers.size() && layer >= 0)
     {
@@ -84,4 +84,9 @@ void MapRenderer::updateImage()
 
     openGLNode->updateComposite(composite);
     openGLNode->update();
+}
+
+QPair<int, int> MapRenderer::getOpenGLNodeSize()
+{
+    return openGLNodeSize;
 }
