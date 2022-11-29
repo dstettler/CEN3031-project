@@ -8,11 +8,12 @@
 MapRenderer::MapRenderer()
 {
     // Temporary layers
-    QPixmap _circle("D:/Documents/GitHub/hurrigators-project/build/circle.png");
-    addLayer(_circle);
-
-    QPixmap _smile("D:/Documents/GitHub/hurrigators-project/build/smile.png");
-    addLayer(_smile);
+    QPixmap _baseLayer(10,10);
+   
+    for (int i = 0; i < 4; i++)
+    {
+        addLayer(_baseLayer);
+    }
 }
 
 void MapRenderer::updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode)
@@ -29,7 +30,7 @@ void MapRenderer::addLayer(QPixmap pixmap)
 
 bool MapRenderer::updateLayer(MapRenderer::RenderLayer layer, QPixmap newPixmap)
 {
-    if (layer < layers.size() && layer >= 0)
+    if (layer < layers.size() && static_cast<unsigned int>(layer) >= 0)
     {
         layers.remove(layer);
         layers.insert(layer, newPixmap);

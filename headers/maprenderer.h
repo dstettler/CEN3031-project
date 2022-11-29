@@ -32,10 +32,13 @@ private:
 
 public:
     explicit MapRenderer();
+    
     void addLayer(QPixmap pixmap);
+    
     bool updateLayer(RenderLayer layer, QPixmap newPixmap);
     void updateImage();
     void updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode);
+
     QPair<int, int> getOpenGLNodeSize();
 };
 
