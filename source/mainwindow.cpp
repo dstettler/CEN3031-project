@@ -5,6 +5,8 @@
 
 #include "ui_mainwindow.h"
 
+#include <locale>
+
 #include <QMessageBox>
 #include <QSharedPointer>
 #include <QDir>
@@ -33,9 +35,16 @@ void MainWindow::onWindowShown()
     mapRenderer.updateOpenGLNode(QSharedPointer<RendererOpenGLWidget>(ui->openGLWidget));
     mapRenderer.updateImage();
 
-    LibOsmHandler osmHandler(QDir::currentPath(), QSharedPointer<MapRenderer>(&mapRenderer));
-    
-    osmHandler.renderMap();
+    QString buildPath = QDir::currentPath();// + "/build";
+
+    std::string stdPath = buildPath.toStdString();
+
+    std::string localeStr = std::locale("").name();
+
+
+    osmHandler = QSharedPointer<LibOsmHandler>(new LibOsmHandler(stdPath, &mapRenderer));
+
+    osmHandler->renderMap();
 
     mapRenderer.updateImage();
 }

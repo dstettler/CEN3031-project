@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "headers/maprenderer.h"
+#include "headers/libosmhandler.h"
+
+#include <QMainWindow>
+#include <QSharedPointer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +28,7 @@ Q_SIGNALS:
 
 private:
     MapRenderer mapRenderer;
+    QSharedPointer<LibOsmHandler> osmHandler;
 
     Ui::MainWindow *ui;
 };

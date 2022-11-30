@@ -10,7 +10,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(QT_MINIMUM_VERSION 5.2)
+set(QT_MINIMUM_VERSION 5.15)
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CFLAGS} -static-libgcc -static-libstdc++ -g")
 
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt
@@ -37,7 +39,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
 
 # Find Python components
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(Python 3.11 COMPONENTS Interpreter Development REQUIRED)
 
 # Manually add all headers and sources here since this is a relatively small project
 set(PROJECT_SOURCES
@@ -81,7 +83,7 @@ endif()
 target_compile_definitions(HurrigatorsProject PRIVATE -DQT_NO_KEYWORDS)
 
 # Link libosmscout
-target_link_libraries(HurrigatorsProject PRIVATE OSMScout OSMScoutClientQt OSMScoutMapQt)
+target_link_libraries(HurrigatorsProject PRIVATE OSMScout OSMScoutClientQt OSMScoutMapQt OSMScoutMap)
 
 # Link the Qt modules
 target_link_libraries(HurrigatorsProject PRIVATE

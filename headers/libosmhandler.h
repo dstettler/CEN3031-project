@@ -13,45 +13,55 @@
 
 #include <osmscout/util/GeoBox.h>
 #include <osmscout/util/Projection.h>
-#include <osmscoutmap/MapParameter.h>
 #include <osmscout/Database.h>
+#include <osmscout/BasemapDatabase.h>
 
 #include <osmscoutmap/MapService.h>
+#include <osmscoutmap/MapParameter.h>
 
 #include <osmscoutmapqt/MapPainterQt.h>
 
 class LibOsmHandler
 {
-    QString appPath;
+    std::string appPath;
+    unsigned int moveAmount;
 
-    QSharedPointer<QThread> renderingThread;
-    QSharedPointer<MapRenderer> rendererPtr;
+    MapRenderer *rendererPtr;
     QPixmap currentMapImage;
 
-    osmscout::DatabaseRef osmDbRef;
-    osmscout::MapServiceRef osmMapServiceRef;
+    osmscout::Database *osmDbRef;
+    osmscout::MapService *osmMapServiceRef;
     osmscout::StyleConfigRef osmStyleConfigRef;
+    osmscout::BasemapDatabaseRef osmBasemapDb;
 
     osmscout::GeoBox osmBoundingBox;
-    osmscout::Magnification osmMagnificationLevel;
-    osmscout::MercatorProjection osmProjection;
-    osmscout::MapParameter osmMapParameter;
+    //osmscout::Magnification osmMagnificationLevel;
+    osmscout::MercatorProjection osmMapProjection;
+    //osmscout::MapParameter osmMapParameter;
     osmscout::MapData osmMapData;
+    osmscout::AreaSearchParameter osmSearchParameter;
     
     QMutex mapLock;
     QMutex mapImageLock;
 
-    QSharedPointer<osmscout::MapPainterQt> osmPainterQt;
+    osmscout::MapPainterQt *osmPainterQt;
 
     QList<osmscout::TileRef>  _tiles;
-	QVector<osmscout::GeoCoord> _lastRoute;
+	//QVector<osmscout::GeoCoord> _lastRoute;
 
     void openDatabase(QString dbPath);
     void openStyles(QString stylePath);
-    void paintWithPainter(QSharedPointer<QPainter> painter);
+    void loadData();
+    void paintWithPainter(QPainter *painter);
 
 public:
-    LibOsmHandler(QString appPath, QSharedPointer<MapRenderer> renderer);
+    LibOsmHandler(std::string appPath, MapRenderer *renderer);
+    ~LibOsmHandler();
+
+    moveLeft();
+    moveRight();
+    moveUp();
+    moveDown();
 
     void renderMap();
 };
