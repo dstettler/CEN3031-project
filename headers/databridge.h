@@ -20,6 +20,9 @@ public:
             this->z = z;
         }
 
+        //Default constructor
+        GeoPoint() {};
+
         float x;
         float y;
         float z;
@@ -41,7 +44,7 @@ public:
         }
     };
 
-    DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer);
+    DataBridge(QString fileName, MapRenderer *renderer);
     QPair<float, float> getBoundBoxLats;
 
     //Getter functions
@@ -68,7 +71,7 @@ private:
     GeoPoint boundBoxLeft;  //y is lattitudes, x is longs
     GeoPoint boundBoxRight;
     int widthInPixels;
-    QSharedPointer<MapRenderer> mapRendererPtr;
+    MapRenderer *mapRendererPtr;
 };
 
 #endif // DATABRIDGE_H

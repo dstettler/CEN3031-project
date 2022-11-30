@@ -60,7 +60,7 @@ void MainWindow::onWindowShown()
      * Make sure to also change the function call under databridge.cpp
     */
 
-    DataBridge d(_fileName, QSharedPointer<MapRenderer>(&mapRenderer));
+    DataBridge d(_fileName, &mapRenderer);
 }
 
 MainWindow::~MainWindow()

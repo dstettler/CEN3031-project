@@ -27,6 +27,18 @@ void Drawing::drawTrack(QSharedPointer<DataBridge>context)
 
 void Drawing::drawCone(QSharedPointer<DataBridge>context)
 {
+    QSharedPointer<QVector<DataBridge::GeoPoint>> coneCoordinates = context->GetConeCoordinatesVector();
+
+    //Previous point
+    DataBridge::GeoPoint previousPoint;
+
+    //Boolean switch to see if previous point is in bounds or out of bounds
+    bool switchForBounds = true;
+
+    for (int i = 0; i < coneCoordinates->size(); i++)
+    {
+
+    }
 
 }
 

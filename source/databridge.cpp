@@ -131,12 +131,12 @@ void DataBridge::ReadConeFile(QString fileName)
                             }
                           Gchild = Gchild.nextSibling().toElement();
                         }
-                        /*
+
                         for (int i = 0; i < coneCoordinatesVector.size(); i++)
                         {
                             qDebug() << coneCoordinatesVector[i].x << " " << coneCoordinatesVector[i].y << " " << coneCoordinatesVector[i].z;
                         }
-                        */
+
                         break;
                     }
                     Child = Child.nextSibling().toElement();
@@ -383,14 +383,14 @@ float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordi
 }
 
 //-------------------------------------CONSTRUCTOR-----------------------------------------------------//
-DataBridge::DataBridge(QString fileName, QSharedPointer<MapRenderer> renderer)
+DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
      :mapRendererPtr(renderer),
       boundBoxLeft(-89.703, 23.483, 0),
       boundBoxRight(-72.455, 31.952, 0)
       //get width in pixels
 {
-    ReadTrackFile(fileName + "/ConeTest.xml");
-    //ReadConeFile(fileName + "/ConeTest.xml");
+    //ReadTrackFile(fileName + "/ConeTest.xml");
+    ReadConeFile(fileName + "/ConeTest.xml");
     //ReadWarningsFile(fileName + "/ConeTest.xml");
 }
 

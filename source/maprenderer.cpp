@@ -85,8 +85,3 @@ void MapRenderer::updateImage()
     openGLNode->updateComposite(composite);
     openGLNode->update();
 }
-
-QPair<int, int> MapRenderer::getOpenGLNodeSize()
-{
-    return openGLNodeSize;
-}
