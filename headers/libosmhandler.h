@@ -21,47 +21,49 @@
 
 #include <osmscoutmapqt/MapPainterQt.h>
 
+#define LIBOSMHANDLER_MOVE_CONSTANT 2.0
+#define LIBOSMHANDLER_ZOOM_SCALE 15.0
+
 class LibOsmHandler
 {
-    std::string appPath;
-    unsigned int moveAmount;
+    QString appPath;
 
     MapRenderer *rendererPtr;
-    QPixmap currentMapImage;
 
-    osmscout::Database *osmDbRef;
-    osmscout::MapService *osmMapServiceRef;
+    osmscout::DatabaseRef osmDbRef;
+    osmscout::MapServiceRef osmMapServiceRef;
     osmscout::StyleConfigRef osmStyleConfigRef;
     osmscout::BasemapDatabaseRef osmBasemapDb;
 
-    osmscout::GeoBox osmBoundingBox;
-    //osmscout::Magnification osmMagnificationLevel;
-    osmscout::MercatorProjection osmMapProjection;
-    //osmscout::MapParameter osmMapParameter;
-    osmscout::MapData osmMapData;
+    osmscout::MapParameter osmMapParameter;
+    osmscout::DatabaseParameter osmDbParam;
     osmscout::AreaSearchParameter osmSearchParameter;
-    
-    QMutex mapLock;
-    QMutex mapImageLock;
+
+    std::list<osmscout::TileRef> osmTileRefList;
+
+    osmscout::MercatorProjection osmMapProjection;
+    osmscout::MapData osmMapData;
 
     osmscout::MapPainterQt *osmPainterQt;
 
-    QList<osmscout::TileRef>  _tiles;
-	//QVector<osmscout::GeoCoord> _lastRoute;
-
     void openDatabase(QString dbPath);
     void openStyles(QString stylePath);
+    void dbConfig(QString dbPath);
     void loadData();
+    void loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles);
     void paintWithPainter(QPainter *painter);
 
 public:
-    LibOsmHandler(std::string appPath, MapRenderer *renderer);
+    LibOsmHandler(QString appPath, MapRenderer *renderer);
     ~LibOsmHandler();
 
-    moveLeft();
-    moveRight();
-    moveUp();
-    moveDown();
+    void moveLeft();
+    void moveRight();
+    void moveUp();
+    void moveDown();
+
+    void zoomIn();
+    void zoomOut();
 
     void renderMap();
 };

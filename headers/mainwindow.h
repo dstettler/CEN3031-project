@@ -26,9 +26,14 @@ public Q_SLOTS:
 Q_SIGNALS:
     void windowShown();
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     MapRenderer mapRenderer;
     QSharedPointer<LibOsmHandler> osmHandler;
+
+    bool windowShownSwitch;
 
     Ui::MainWindow *ui;
 };

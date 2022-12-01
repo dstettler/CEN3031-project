@@ -13,56 +13,31 @@
 #include <osmscoutmapqt/MapPainterQt.h>
 #include <osmscoutmap/StyleConfig.h>
 #include <osmscoutmap/MapParameter.h>
+#include <osmscoutmap/MapService.h>
+#include <osmscout/BasemapDatabase.h>
 
-LibOsmHandler::LibOsmHandler(std::string appPath, MapRenderer *renderer)
+LibOsmHandler::LibOsmHandler(QString appPath, MapRenderer *renderer)
     :appPath(appPath),
     rendererPtr(renderer),
     osmPainterQt(nullptr),
     osmDbRef(nullptr),
     osmMapServiceRef(nullptr),
-    osmStyleConfigRef(nullptr),
-    // bbox=-87.891,23.262,-70.642,31.747
-    osmBoundingBox(osmscout::GeoCoord(-87.891, 19.262), osmscout::GeoCoord(-70.642, 31.747)),
-    moveAmount(50)
+    osmStyleConfigRef(nullptr)
 {
-    QString _appPath = QString::fromStdString(appPath);
-
-    currentMapImage = QPixmap(0,0);
-
-    openDatabase(_appPath + "/map-data/us-south-latest");
-    openStyles(_appPath + "/stylesheets/standard.oss");
-
-    osmscout::GeoCoord _center(30.673, -82.724);
-    QPair<int, int> dim = rendererPtr->getOpenGLNodeSize();
-    osmMapProjection.Set(_center, osmscout::Magnification(35), dim.first, dim.second);
-
-    loadData();
+    openDatabase(appPath + "/map");
+    openStyles(appPath + "/stylesheets/standard.oss");
+    dbConfig(appPath + "/map");
 }
 
 LibOsmHandler::~LibOsmHandler()
 {
     if (osmPainterQt)
         delete osmPainterQt;
-
-    if (osmDbRef)
-        delete osmDbRef;
-    
-    if (osmMapServiceRef)
-        delete osmMapServiceRef;
 }
 
 void LibOsmHandler::openDatabase(QString dbPath)
-{
-    osmscout::DatabaseParameter _dbParam;
-
-    if (osmDbRef)
-        delete osmDbRef;
-    osmDbRef = new osmscout::Database(_dbParam);
-    
-    if (osmMapServiceRef)
-        delete osmMapServiceRef;
-
-    osmMapServiceRef = new osmscout::MapService(osmscout::DatabaseRef(osmDbRef));
+{    
+    osmDbRef = std::make_shared<osmscout::Database>(osmDbParam);
 
     if (!osmDbRef->Open(dbPath.toStdString()))
     {
@@ -71,20 +46,13 @@ void LibOsmHandler::openDatabase(QString dbPath)
         _msg.exec();
     }
 
-    osmBasemapDb.reset(new osmscout::BasemapDatabase(osmscout::BasemapDatabaseParameter{}));
-    if (!osmBasemapDb->Open(dbPath.toStdString()))
-    {
-        QMessageBox _msg;
-        _msg.setText("Unable to load basemap database from: " + dbPath);
-        _msg.exec();
-    }
+    osmMapServiceRef = std::make_shared<osmscout::MapService>(osmDbRef);
 }
 
 void LibOsmHandler::openStyles(QString stylePath)
 {
-    osmStyleConfigRef.reset(new osmscout::StyleConfig(osmDbRef->GetTypeConfig()));
+    osmStyleConfigRef = std::make_shared<osmscout::StyleConfig>(osmDbRef->GetTypeConfig());
     
-
     if (!osmStyleConfigRef->Load(stylePath.toStdString()))
     {
         QMessageBox _msg;
@@ -93,21 +61,77 @@ void LibOsmHandler::openStyles(QString stylePath)
     }
 }
 
+void LibOsmHandler::dbConfig(QString dbPath)
+{
+    osmMapParameter.SetRenderSeaLand(true);
+    osmMapParameter.SetRenderUnknowns(false);
+    osmMapParameter.SetRenderBackground(false);
+    osmMapParameter.SetRenderContourLines(false);
+    osmMapParameter.SetRenderHillShading(false);
+
+    osmMapParameter.SetLabelLineMinCharCount(15);
+    osmMapParameter.SetLabelLineMaxCharCount(30);
+    osmMapParameter.SetLabelLineFitToArea(true);
+
+    osmscout::GeoCoord _center(31.071, -81.350);
+    QPair<int, int> dim = rendererPtr->getOpenGLNodeSize();
+    osmMapProjection.Set(_center, osmscout::Magnification(100), 96.0, dim.first, dim.second);
+
+    osmBasemapDb = std::make_shared<osmscout::BasemapDatabase>(osmscout::BasemapDatabaseParameter{});
+    if (!osmBasemapDb->Open(dbPath.toStdString()))
+    {
+        QMessageBox _msg;
+        _msg.setText("Unable to load basemap database from: " + dbPath);
+        _msg.exec();
+    }
+}
+
 void LibOsmHandler::loadData()
 {
-    std::list<osmscout::TileRef> _tiles;
+    if (osmPainterQt)
+        delete osmPainterQt;
+
+    osmTileRefList.clear();
+    osmPainterQt = new osmscout::MapPainterQt(osmStyleConfigRef);
+
+    assert(osmDbRef);
+    assert(osmDbRef->IsOpen());
+    assert(osmMapServiceRef);
+    assert(osmStyleConfigRef);
+
     osmMapData.ClearDBData();
 
-    osmMapServiceRef->LookupTiles(osmMapProjection, _tiles);
-    osmMapServiceRef->LoadMissingTileData(osmSearchParameter, *osmStyleConfigRef, _tiles);
-    osmMapServiceRef->AddTileDataToMapData(_tiles, osmMapData);
+    osmMapServiceRef->LookupTiles(osmMapProjection, osmTileRefList);
+    osmMapServiceRef->LoadMissingTileData(osmSearchParameter, *osmStyleConfigRef, osmTileRefList);
+    osmMapServiceRef->AddTileDataToMapData(osmTileRefList, osmMapData);
     osmMapServiceRef->GetGroundTiles(osmMapProjection, osmMapData.groundTiles);
+
+    loadBaseMapTiles(osmMapData.baseMapTiles);
+}
+
+void LibOsmHandler::loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles)
+{
+    if (!osmBasemapDb)
+    {
+        QMessageBox _msg;
+        _msg.setText("No basemap db to load water index from!");
+        _msg.exec();
+        return;
+    }
 
     osmscout::WaterIndexRef _waterIndex = osmBasemapDb->GetWaterIndex();
 
+    if (!_waterIndex)
+    {
+        QMessageBox _msg;
+        _msg.setText("No water index :(");
+        _msg.exec();
+        return;
+    }
+        
     osmscout::GeoBox _boundingBox;
     osmMapProjection.GetDimensions(_boundingBox);
-    if (!_waterIndex->GetRegions(_boundingBox, osmMapProjection.GetMagnification(), osmMapData.baseMapTiles))
+    if (!_waterIndex->GetRegions(_boundingBox, osmMapProjection.GetMagnification(), tiles))
     {
         QMessageBox _msg;
         _msg.setText("Unable to read water regions from base map tiles");
@@ -117,43 +141,118 @@ void LibOsmHandler::loadData()
 
 void LibOsmHandler::paintWithPainter(QPainter *painter)
 {
-    if (osmPainterQt)
-        delete osmPainterQt;
-
-    osmPainterQt = new osmscout::MapPainterQt(osmStyleConfigRef);
-
-    mapLock.lock();   
-
-    osmscout::MapParameter osmMapParameter;
-
-    if (!osmPainterQt->DrawMap(osmMapProjection, osmMapParameter, osmMapData, painter))
+    if (osmPainterQt->DrawMap(osmMapProjection, osmMapParameter, osmMapData, painter))
+    {
+        return;
+    }
+    else
     {
         QMessageBox _msg;
         _msg.setText("Unable to draw map.");
         _msg.exec();
     }
-
-    /*QPen pen;
-    pen.setColor(Qt::red);
-    pen.setWidth(5);
-    painter->setPen(pen);
-    painter->drawRect(10,10,500,500);*/
-
-    mapLock.unlock();
 }
 
 void LibOsmHandler::renderMap()
 {
     QPair<int, int> _canvasSize = rendererPtr->getOpenGLNodeSize();
     QPixmap _canvas(_canvasSize.first, _canvasSize.second);
-    QPainter painter(&_canvas);
+    _canvas.fill(Qt::transparent);
+    QPainter *painter = new QPainter(&_canvas);
 
-    paintWithPainter(&painter);
+    loadData();
 
-    mapImageLock.lock();
+    paintWithPainter(painter);
 
-    currentMapImage = _canvas;
-    rendererPtr->updateLayer(MapRenderer::RenderLayer::Map ,currentMapImage);
-
-    mapImageLock.unlock();
+    delete painter;
+    
+    rendererPtr->updateLayer(MapRenderer::RenderLayer::Map, _canvas);
 }
+
+void LibOsmHandler::moveUp()
+{
+    osmscout::GeoCoord _newCenter, _oldCenter;
+    _oldCenter = osmMapProjection.GetCenter();
+    _newCenter.Set(
+        _oldCenter.GetLat() + LIBOSMHANDLER_MOVE_CONSTANT,
+        _oldCenter.GetLon()
+     );
+
+    osmMapProjection.Set(
+        _newCenter, 
+        osmMapProjection.GetMagnification(), 
+        osmMapProjection.GetWidth(), 
+        osmMapProjection.GetHeight());
+}
+
+void LibOsmHandler::moveDown()
+{
+    osmscout::GeoCoord _newCenter, _oldCenter;
+    _oldCenter = osmMapProjection.GetCenter();
+    _newCenter.Set(
+        _oldCenter.GetLat() - LIBOSMHANDLER_MOVE_CONSTANT,
+        _oldCenter.GetLon()
+     );
+
+    osmMapProjection.Set(
+        _newCenter, 
+        osmMapProjection.GetMagnification(), 
+        osmMapProjection.GetWidth(), 
+        osmMapProjection.GetHeight());
+}
+
+void LibOsmHandler::moveLeft()
+{
+    osmscout::GeoCoord _newCenter, _oldCenter;
+    _oldCenter = osmMapProjection.GetCenter();
+    _newCenter.Set(
+        _oldCenter.GetLat(),
+        _oldCenter.GetLon() - LIBOSMHANDLER_MOVE_CONSTANT
+     );
+
+    osmMapProjection.Set(
+        _newCenter, 
+        osmMapProjection.GetMagnification(), 
+        osmMapProjection.GetWidth(), 
+        osmMapProjection.GetHeight());
+}
+
+void LibOsmHandler::moveRight()
+{
+    osmscout::GeoCoord _newCenter, _oldCenter;
+    _oldCenter = osmMapProjection.GetCenter();
+    _newCenter.Set(
+        _oldCenter.GetLat(),
+        _oldCenter.GetLon() + LIBOSMHANDLER_MOVE_CONSTANT
+     );
+
+    osmMapProjection.Set(
+        _newCenter, 
+        osmMapProjection.GetMagnification(), 
+        osmMapProjection.GetWidth(), 
+        osmMapProjection.GetHeight());
+}
+
+void LibOsmHandler::zoomIn()
+{
+    osmMapProjection.Set(
+        osmMapProjection.GetCenter(),
+        osmscout::Magnification(osmMapProjection.GetMagnification().GetMagnification() + LIBOSMHANDLER_ZOOM_SCALE),
+        osmMapProjection.GetWidth(),
+        osmMapProjection.GetHeight()
+    );
+}
+
+void LibOsmHandler::zoomOut()
+{
+    if (osmMapProjection.GetMagnification().GetMagnification() == 0)
+        return;
+
+    osmMapProjection.Set(
+        osmMapProjection.GetCenter(),
+        osmscout::Magnification(osmMapProjection.GetMagnification().GetMagnification() - LIBOSMHANDLER_ZOOM_SCALE),
+        osmMapProjection.GetWidth(),
+        osmMapProjection.GetHeight()
+    );
+}
+
