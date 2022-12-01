@@ -37,7 +37,7 @@ LibOsmHandler::~LibOsmHandler()
 
 void LibOsmHandler::openDatabase(QString dbPath)
 {    
-    osmDbRef = std::make_shared<osmscout::Database>(osmDbParam);
+    osmDbRef.reset(new osmscout::Database(osmDbParam));
 
     if (!osmDbRef->Open(dbPath.toStdString()))
     {
@@ -46,12 +46,12 @@ void LibOsmHandler::openDatabase(QString dbPath)
         _msg.exec();
     }
 
-    osmMapServiceRef = std::make_shared<osmscout::MapService>(osmDbRef);
+    osmMapServiceRef.reset(new osmscout::MapService(osmDbRef));
 }
 
 void LibOsmHandler::openStyles(QString stylePath)
 {
-    osmStyleConfigRef = std::make_shared<osmscout::StyleConfig>(osmDbRef->GetTypeConfig());
+    osmStyleConfigRef.reset(new osmscout::StyleConfig(osmDbRef->GetTypeConfig()));
     
     if (!osmStyleConfigRef->Load(stylePath.toStdString()))
     {
@@ -69,15 +69,11 @@ void LibOsmHandler::dbConfig(QString dbPath)
     osmMapParameter.SetRenderContourLines(false);
     osmMapParameter.SetRenderHillShading(false);
 
-    osmMapParameter.SetLabelLineMinCharCount(15);
-    osmMapParameter.SetLabelLineMaxCharCount(30);
-    osmMapParameter.SetLabelLineFitToArea(true);
-
     osmscout::GeoCoord _center(31.071, -81.350);
     QPair<int, int> dim = rendererPtr->getOpenGLNodeSize();
     osmMapProjection.Set(_center, osmscout::Magnification(100), 96.0, dim.first, dim.second);
 
-    osmBasemapDb = std::make_shared<osmscout::BasemapDatabase>(osmscout::BasemapDatabaseParameter{});
+    osmBasemapDb.reset(new osmscout::BasemapDatabase(osmscout::BasemapDatabaseParameter{}));
     if (!osmBasemapDb->Open(dbPath.toStdString()))
     {
         QMessageBox _msg;
