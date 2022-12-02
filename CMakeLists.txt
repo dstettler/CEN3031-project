@@ -51,6 +51,7 @@ find_package(Python 3.11 COMPONENTS Interpreter Development REQUIRED)
 set(PROJECT_SOURCES
     forms/mainwindow.ui
 
+
     headers/databridge.h
     headers/libosmhandler.h
     headers/mainwindow.h

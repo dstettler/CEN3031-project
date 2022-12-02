@@ -10,9 +10,9 @@ private:
     float coordsPerPixel;
 
 public:
-    void drawCone(QSharedPointer<DataBridge>context);
-    void drawTrack(QSharedPointer<DataBridge>context);
-    void drawWarnings(QSharedPointer<DataBridge>context);
+    void drawCone(DataBridge* context);
+    void drawTrack(DataBridge* context);
+    void drawWarnings(DataBridge* context);
 };
 
 #endif // DRAWING_H

@@ -7,10 +7,10 @@
 #include <QVector>
 #include <QtXml>
 
-//---------------------------------------GETTER FUNCTiONS--------------------------------------------------------//
-QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetTrackCoordinatesVector()
+//---------------------------------------GETTER FUNCTIONS--------------------------------------------------------//
+QVector<DataBridge::GeoPoint> DataBridge::GetTrackCoordinatesVector()
 {
-    return QSharedPointer<QVector<GeoPoint>>(&trackCoordinates);
+    return QVector<GeoPoint>(trackCoordinates);
 }
 
 QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetConeCoordinatesVector()
@@ -386,11 +386,12 @@ float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordi
 DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
      :mapRendererPtr(renderer),
       boundBoxLeft(-89.703, 23.483, 0),
-      boundBoxRight(-72.455, 31.952, 0)
+      boundBoxRight(-72.455, 31.952, 0),
+      widthInPixels(renderer->getOpenGLNodeSize().first)
       //get width in pixels
 {
-    //ReadTrackFile(fileName + "/ConeTest.xml");
-    ReadConeFile(fileName + "/ConeTest.xml");
-    //ReadWarningsFile(fileName + "/ConeTest.xml");
+    ReadTrackFile(fileName + "/noaa_cache/0/track/al152022_024adv_TRACK.kml");
+    ReadConeFile(fileName + "/noaa_cache/0/cone/al152022_024adv_CONE.kml");
+    ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al152022_014Aadv_WW.kml");
 }
 

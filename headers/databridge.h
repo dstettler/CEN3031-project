@@ -44,11 +44,18 @@ public:
         }
     };
 
+    // conversion from earth coordinates to on screen coordinates
+    float CoordPerPixel(int widthInPixels);
+    QPair<float,float> LatLonToScreenCoord(float x, float y);
+
+
+    // constructor
     DataBridge(QString fileName, MapRenderer *renderer);
+
     QPair<float, float> getBoundBoxLats;
 
     //Getter functions
-    QSharedPointer<QVector<GeoPoint>> GetTrackCoordinatesVector();
+    QVector<GeoPoint> GetTrackCoordinatesVector();
     QSharedPointer<QVector<GeoPoint>> GetConeCoordinatesVector();
     QSharedPointer<QVector<GeoPoint>> GetWarningsCoordinatesVector();
     GeoPoint GetBoundBoxLeft();
@@ -59,8 +66,6 @@ private:
     void ReadTrackFile(QString fileName);
     void ReadConeFile(QString fileName);
     void ReadWarningsFile(QString fileName);
-    float CoordPerPixel(int widthInPixels);
-    QPair<float,float> LatLonToScreenCoord(float x, float y);
 
     //Variables
     QVector<GeoPoint> trackCoordinates;

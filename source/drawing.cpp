@@ -2,15 +2,39 @@
 #include <QPixmap>
 #include <QPainter>
 
-void Drawing::drawTrack(QSharedPointer<DataBridge>context)
+void Drawing::drawTrack(DataBridge* context)
 {
-    QSharedPointer<QVector<DataBridge::GeoPoint>> trackCoordinates = context->GetTrackCoordinatesVector();
+    QVector<DataBridge::GeoPoint> trackCoordinates = context->GetTrackCoordinatesVector();
+    DataBridge::GeoPoint leftBound = context->GetBoundBoxLeft();
+    DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();
+    QPainter paint;
 
-     //Save previous point variable
 
-     //Boolean (switch thing) to see if the previous point was out of bounds (Default: False, point is out of bound) (False: Out of bounds, True: In Bounds)
+    //------------------------Dots----------------------------------//
+    for (int i = 0; i < trackCoordinates.size(); i++)
+    {
+        //Check if in bounds and draw if it is
+        if (trackCoordinates[i].x > 0 && trackCoordinates[i].x < rightBound.x &&
+            trackCoordinates[i].y > 0 && trackCoordinates[i].y < leftBound.y)
+        {
+            //convert
+            QPair<float,float> convertedCoords = context->LatLonToScreenCoord(trackCoordinates[i].x, trackCoordinates[i].y);
 
-    for (int i = 0; i < trackCoordinates->size(); i++)
+            //draw
+            float xCoord = convertedCoords.first;
+            float yCoord = convertedCoords.second;
+            paint.drawPoint(xCoord, yCoord);
+        }
+    }
+
+
+
+    //------------------------Line----------------------------------//
+    //Save previous point variable
+
+    //Boolean (switch thing) to see if the previous point was out of bounds (Default: False, point is out of bound) (False: Out of bounds, True: In Bounds)
+
+    for (int i = 0; i < trackCoordinates.size(); i++)
     {
 
         //Check in bounds, if within bounds, then draw
@@ -25,7 +49,7 @@ void Drawing::drawTrack(QSharedPointer<DataBridge>context)
 
 }
 
-void Drawing::drawCone(QSharedPointer<DataBridge>context)
+void Drawing::drawCone(DataBridge* context)
 {
     QSharedPointer<QVector<DataBridge::GeoPoint>> coneCoordinates = context->GetConeCoordinatesVector();
 
@@ -42,7 +66,7 @@ void Drawing::drawCone(QSharedPointer<DataBridge>context)
 
 }
 
-void Drawing::drawWarnings(QSharedPointer<DataBridge>context)
+void Drawing::drawWarnings(DataBridge* context)
 {
 
 }
