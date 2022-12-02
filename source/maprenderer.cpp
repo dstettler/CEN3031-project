@@ -8,13 +8,14 @@
 MapRenderer::MapRenderer()
 {
     // Temporary layers
-    QPixmap _circle("D:/Documents/GitHub/hurrigators-project/build/circle.png");
-    addLayer(_circle);
+    QPixmap _baseLayer(10,10);
 
-    QPixmap _smile("D:/Documents/GitHub/hurrigators-project/build/smile.png");
-    addLayer(_smile);
+    for (int i = 0; i < 4; i++)
+    {
+        addLayer(_baseLayer);
+    }
 
-    openGLNodeSize = QPair<int, int>(0,0);
+  openGLNodeSize = QPair<int, int>(0,0);
 }
 
 QPair<int, int> MapRenderer::getOpenGLNodeSize()
