@@ -55,9 +55,9 @@ public:
     QPair<float, float> getBoundBoxLats;
 
     //Getter functions
-    QVector<GeoPoint> GetTrackCoordinatesVector();
-    QSharedPointer<QVector<GeoPoint>> GetConeCoordinatesVector();
-    QSharedPointer<QVector<GeoPoint>> GetWarningsCoordinatesVector();
+    QVector<GeoPoint>* GetTrackCoordinatesVector();
+    QVector<GeoPoint>* GetConeCoordinatesVector();
+    QVector<GeoPoint>* GetWarningsCoordinatesVector();
     GeoPoint GetBoundBoxLeft();
     GeoPoint GetBoundBoxRight();
     MapRenderer* GetMapRendererPtr();

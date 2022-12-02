@@ -64,7 +64,7 @@ void MainWindow::onWindowShown()
     //Making dataBridge point to DataBridge instance
     dataBridge = QSharedPointer<DataBridge> (new DataBridge(_fileName, &mapRenderer));
 
-    hurricaneDrawing.drawTrack(dataBridge.get());
+    hurricaneDrawing.drawCone(dataBridge.get());
 
     mapRenderer.updateImage();
 

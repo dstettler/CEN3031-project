@@ -8,19 +8,18 @@
 #include <QtXml>
 
 //---------------------------------------GETTER FUNCTIONS--------------------------------------------------------//
-QVector<DataBridge::GeoPoint> DataBridge::GetTrackCoordinatesVector()
+QVector<DataBridge::GeoPoint>* DataBridge::GetTrackCoordinatesVector()
 {
-    return QVector<GeoPoint>(trackCoordinates);
+    return &trackCoordinates;
+}
+QVector<DataBridge::GeoPoint>* DataBridge::GetConeCoordinatesVector()
+{
+    return &coneCoordinatesVector;
 }
 
-QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetConeCoordinatesVector()
+QVector<DataBridge::GeoPoint>* DataBridge::GetWarningsCoordinatesVector()
 {
-    return QSharedPointer<QVector<GeoPoint>>(&coneCoordinatesVector);
-}
-
-QSharedPointer<QVector<DataBridge::GeoPoint>> DataBridge::GetWarningsCoordinatesVector()
-{
-    return QSharedPointer<QVector<GeoPoint>>(&warningsCoordinatesVector);
+    return &warningsCoordinatesVector;
 }
 
 DataBridge::GeoPoint DataBridge::GetBoundBoxLeft()
@@ -390,8 +389,8 @@ float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordi
 //-------------------------------------CONSTRUCTOR-----------------------------------------------------//
 DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
      :mapRendererPtr(renderer),
-      boundBoxLeft(-89.703, 23.483, 0),
-      boundBoxRight(-72.455, 31.952, 0),
+      boundBoxLeft(-96, 20, 0),
+      boundBoxRight(-94, 21, 0),
       widthInPixels(renderer->getOpenGLNodeSize().first)
       //get width in pixels
 {
