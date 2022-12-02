@@ -371,18 +371,22 @@ void DataBridge::ReadTrackFile(QString fileName)
 QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
 {
     QPair<int, int> ScreenPoint;
-    ScreenPoint.first = x/CoordPerPixel(widthInPixels);
-    ScreenPoint.second = y/CoordPerPixel(widthInPixels);
+    ScreenPoint.first = x/CoordPerPixel(widthInPixels, heightInPixels).first;
+    ScreenPoint.second = y/CoordPerPixel(widthInPixels, heightInPixels).second;
     return ScreenPoint;
 }
 
-float DataBridge::CoordPerPixel(int widthInPixels)  //finds the number of coordinates per screen pixel. width in pixels must be known
+QPair<float, float> DataBridge::CoordPerPixel(int widthInPixels, int heightInPixels)  //finds the number of coordinates per screen pixel. width in pixels must be known
 {
-    float CoordPerPixel;
+    QPair<float, float> CoordPerPixel;
     float x1 = boundBoxLeft.x;          //left longitude
     float x2 = boundBoxRight.x;         //right longitude
+    float y1 = boundBoxLeft.y;
+    float y2 = boundBoxRight.y;
 
-    CoordPerPixel = (x2 - x1)/widthInPixels;
+
+    CoordPerPixel.first = (x2 - x1)/widthInPixels;
+    CoordPerPixel.second = (y2 - y1)/heightInPixels;
     return CoordPerPixel;
 }
 
@@ -391,7 +395,8 @@ DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
      :mapRendererPtr(renderer),
       boundBoxLeft(-96, 20, 0),
       boundBoxRight(-94, 21, 0),
-      widthInPixels(renderer->getOpenGLNodeSize().first)
+      widthInPixels(renderer->getOpenGLNodeSize().first),
+      heightInPixels(renderer->getOpenGLNodeSize().second)
       //get width in pixels
 {
     ReadTrackFile(fileName + "/noaa_cache/0/track/al152022_024adv_TRACK.kml");

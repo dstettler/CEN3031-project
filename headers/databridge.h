@@ -45,7 +45,7 @@ public:
     };
 
     // conversion from earth coordinates to on screen coordinates
-    float CoordPerPixel(int widthInPixels);
+    QPair<float, float> CoordPerPixel(int widthInPixels, int heightInPixels);
     QPair<int,int> LatLonToScreenCoord(float x, float y);
 
 
@@ -77,6 +77,7 @@ private:
     GeoPoint boundBoxLeft;  //y is lattitudes, x is longs
     GeoPoint boundBoxRight;
     int widthInPixels;
+    int heightInPixels;
     MapRenderer *mapRendererPtr;
 };
 
