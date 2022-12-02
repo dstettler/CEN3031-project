@@ -33,6 +33,11 @@ DataBridge::GeoPoint DataBridge::GetBoundBoxRight()
     return boundBoxRight;
 }
 
+MapRenderer* DataBridge::GetMapRendererPtr()
+{
+    return mapRendererPtr;
+}
+
 //---------------------------------------READ CONE, WARNING, WARNINGS FROM FILE----------------------------------//
 void DataBridge::ReadConeFile(QString fileName)
 {
@@ -364,9 +369,9 @@ void DataBridge::ReadTrackFile(QString fileName)
 }
 
 //---------------------------CONVERSION FROM EARTH COORD TO ON-SCREEN COORD-----------------------------//
-QPair<float,float> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
+QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
 {
-    QPair<float, float> ScreenPoint;
+    QPair<int, int> ScreenPoint;
     ScreenPoint.first = x/CoordPerPixel(widthInPixels);
     ScreenPoint.second = y/CoordPerPixel(widthInPixels);
     return ScreenPoint;

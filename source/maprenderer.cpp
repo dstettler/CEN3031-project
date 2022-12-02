@@ -53,6 +53,8 @@ void MapRenderer::generateCompositeFromLayers()
 {
     QPixmap _canvas(openGLNodeSize.first, openGLNodeSize.second);
     
+    _canvas.fill(Qt::transparent);
+
     // Use a regular pointer in place of a smart pointer to ensure a delete call can be made
     // before the pixmap is assigned (to ensure the framebuffer has finished drawing)
     QPainter* _painter = new QPainter(&_canvas);

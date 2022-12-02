@@ -7,8 +7,12 @@ void Drawing::drawTrack(DataBridge* context)
     QVector<DataBridge::GeoPoint> trackCoordinates = context->GetTrackCoordinatesVector();
     DataBridge::GeoPoint leftBound = context->GetBoundBoxLeft();
     DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();
-    QPainter paint;
 
+    //Set up painting
+    QPair<int,int> _canvasSize = context->GetMapRendererPtr()->getOpenGLNodeSize();
+    QPixmap _canvas(_canvasSize.first, _canvasSize.second);
+    _canvas.fill(Qt::transparent);
+    QPainter* _painter = new QPainter(&_canvas);
 
     //------------------------Dots----------------------------------//
     for (int i = 0; i < trackCoordinates.size(); i++)
@@ -18,12 +22,15 @@ void Drawing::drawTrack(DataBridge* context)
             trackCoordinates[i].y > 0 && trackCoordinates[i].y < leftBound.y)
         {
             //convert
-            QPair<float,float> convertedCoords = context->LatLonToScreenCoord(trackCoordinates[i].x, trackCoordinates[i].y);
+            QPair<int,int> convertedCoords = context->LatLonToScreenCoord(trackCoordinates[i].x, trackCoordinates[i].y);
 
             //draw
-            float xCoord = convertedCoords.first;
-            float yCoord = convertedCoords.second;
-            paint.drawPoint(xCoord, yCoord);
+            int xCoord = convertedCoords.first;
+            int yCoord = convertedCoords.second;
+
+            _painter->setPen(Qt::blue);
+            //_painter->drawPoint(xCoord, yCoord);
+            _painter->drawRect(10,10,500,1000);
         }
     }
 
@@ -47,6 +54,10 @@ void Drawing::drawTrack(DataBridge* context)
 
     }
 
+    //Destructor
+    delete _painter;
+
+    context->GetMapRendererPtr()->updateLayer(MapRenderer::RenderLayer::Track, _canvas);
 }
 
 void Drawing::drawCone(DataBridge* context)

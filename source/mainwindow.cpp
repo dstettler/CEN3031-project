@@ -4,6 +4,7 @@
 
 #include "ui_mainwindow.h"
 #include "headers/databridge.h"
+#include "headers/drawing.h"
 #include <QDir>
 #include <QString>
 #include <QFileInfo>
@@ -60,7 +61,13 @@ void MainWindow::onWindowShown()
      * Make sure to also change the function call under databridge.cpp
     */
 
-    DataBridge d(_fileName, &mapRenderer);
+    //Making dataBridge point to DataBridge instance
+    dataBridge = QSharedPointer<DataBridge> (new DataBridge(_fileName, &mapRenderer));
+
+    hurricaneDrawing.drawTrack(dataBridge.get());
+
+    mapRenderer.updateImage();
+
 }
 
 MainWindow::~MainWindow()

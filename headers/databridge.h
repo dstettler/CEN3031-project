@@ -46,7 +46,7 @@ public:
 
     // conversion from earth coordinates to on screen coordinates
     float CoordPerPixel(int widthInPixels);
-    QPair<float,float> LatLonToScreenCoord(float x, float y);
+    QPair<int,int> LatLonToScreenCoord(float x, float y);
 
 
     // constructor
@@ -60,6 +60,7 @@ public:
     QSharedPointer<QVector<GeoPoint>> GetWarningsCoordinatesVector();
     GeoPoint GetBoundBoxLeft();
     GeoPoint GetBoundBoxRight();
+    MapRenderer* GetMapRendererPtr();
 
 private:
     //Functions
