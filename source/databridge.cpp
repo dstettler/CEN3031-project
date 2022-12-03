@@ -393,15 +393,15 @@ QPair<float, float> DataBridge::CoordPerPixel(int widthInPixels, int heightInPix
 //-------------------------------------CONSTRUCTOR-----------------------------------------------------//
 DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
      :mapRendererPtr(renderer),
-      boundBoxLeft(-96, 20, 0),
-      boundBoxRight(-94, 21, 0),
+      boundBoxLeft(-89.3958, 34.0412, 0),
+      boundBoxRight(-73.3042, 24.1008, 0),
       widthInPixels(renderer->getOpenGLNodeSize().first),
       heightInPixels(renderer->getOpenGLNodeSize().second)
       //get width in pixels
 {
-    ReadTrackFile(fileName + "/noaa_cache/0/track/al152022_024adv_TRACK.kml");
-    ReadConeFile(fileName + "/noaa_cache/0/cone/al152022_024adv_CONE.kml");
-    ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al152022_014Aadv_WW.kml");
+    ReadTrackFile(fileName + "/noaa_cache/0/track/al172022_005Aadv_TRACK.kml");
+    ReadConeFile(fileName + "/noaa_cache/0/cone/al172022_005Aadv_CONE.kml");
+    ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al172022_005Aadv_WW.kml");
     qDebug() << CoordPerPixel(widthInPixels, heightInPixels);
 }
 

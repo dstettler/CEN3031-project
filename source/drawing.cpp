@@ -29,9 +29,8 @@ void Drawing::drawTrack(DataBridge* context)
             int xCoord = convertedCoords.first;
             int yCoord = convertedCoords.second;
 
-            _painter->setPen(Qt::blue);
-            //_painter->drawPoint(xCoord, yCoord);
-            _painter->drawRect(10,10,500,1000);
+            _painter->setPen(Qt::white);
+            _painter->drawPoint(xCoord, yCoord);
         }
     }
 
@@ -77,7 +76,7 @@ void Drawing::drawCone(DataBridge* context)
     for (int i = 0; i < coneCoordinates->size(); i++)
     {
         //Check if in bounds and draw if it is
-        if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y < rightBound.y && coneCoordinates->at(i).y > leftBound.y)
+        if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y > rightBound.y && coneCoordinates->at(i).y < leftBound.y)
         {
             //convert
             QPair<int,int> convertedCoords = context->LatLonToScreenCoord(coneCoordinates->at(i).x, coneCoordinates->at(i).y);
