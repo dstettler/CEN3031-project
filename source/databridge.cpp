@@ -371,8 +371,8 @@ void DataBridge::ReadTrackFile(QString fileName)
 QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
 {
     QPair<int, int> ScreenPoint;
-    ScreenPoint.first = x/CoordPerPixel(widthInPixels, heightInPixels).first;
-    ScreenPoint.second = y/CoordPerPixel(widthInPixels, heightInPixels).second;
+    ScreenPoint.first = (x - boundBoxLeft.x)/CoordPerPixel(widthInPixels, heightInPixels).first;
+    ScreenPoint.second = (y - boundBoxRight.y)/CoordPerPixel(widthInPixels, heightInPixels).second;
     return ScreenPoint;
 }
 
@@ -402,5 +402,6 @@ DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
     ReadTrackFile(fileName + "/noaa_cache/0/track/al152022_024adv_TRACK.kml");
     ReadConeFile(fileName + "/noaa_cache/0/cone/al152022_024adv_CONE.kml");
     ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al152022_014Aadv_WW.kml");
+    qDebug() << CoordPerPixel(widthInPixels, heightInPixels);
 }
 

@@ -89,7 +89,7 @@ void Drawing::drawCone(DataBridge* context)
             xCoord = qFabs(xCoord);
             yCoord = qFabs(yCoord);
 
-            _painter->setPen(Qt::blue);
+            _painter->setPen(Qt::white);
             _painter->drawPoint(xCoord, yCoord);
         }
     }
