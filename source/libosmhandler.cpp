@@ -69,9 +69,13 @@ void LibOsmHandler::dbConfig(QString dbPath)
     osmMapParameter.SetRenderContourLines(false);
     osmMapParameter.SetRenderHillShading(false);
 
-    osmscout::GeoCoord _center(31.071, -81.350);
+    osmscout::GeoCoord _center(LIBOSMHANDLER_DEFAULT_LAT, LIBOSMHANDLER_DEFAULT_LON);
     QPair<int, int> dim = rendererPtr->getOpenGLNodeSize();
-    osmMapProjection.Set(_center, osmscout::Magnification(100), 96.0, dim.first, dim.second);
+    
+    // Not sure why the dpi of 96.0 works the best here but that seems to be the only way to get the map to
+    // draw properly
+    // DO NOT use the .Set() function without specifying dpi or you *will* face the wrath of the weird drawing bug gods
+    osmMapProjection.Set(_center, osmscout::Magnification(LIBOSMHANDLER_DEFAULT_MAG), 96.0, dim.first, dim.second);
 
     osmBasemapDb.reset(new osmscout::BasemapDatabase(osmscout::BasemapDatabaseParameter{}));
     if (!osmBasemapDb->Open(dbPath.toStdString()))
@@ -89,11 +93,6 @@ void LibOsmHandler::loadData()
 
     osmTileRefList.clear();
     osmPainterQt = new osmscout::MapPainterQt(osmStyleConfigRef);
-
-    assert(osmDbRef);
-    assert(osmDbRef->IsOpen());
-    assert(osmMapServiceRef);
-    assert(osmStyleConfigRef);
 
     osmMapData.ClearDBData();
 
@@ -138,7 +137,7 @@ void LibOsmHandler::loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles)
 void LibOsmHandler::paintWithPainter(QPainter *painter)
 {
     if (osmPainterQt->DrawMap(osmMapProjection, osmMapParameter, osmMapData, painter))
-    {
+    {        
         return;
     }
     else
@@ -156,6 +155,7 @@ void LibOsmHandler::renderMap()
     _canvas.fill(Qt::transparent);
     QPainter *painter = new QPainter(&_canvas);
 
+    // Data must be loaded here to reload the tiles within the current projection view before drawing
     loadData();
 
     paintWithPainter(painter);
@@ -164,6 +164,33 @@ void LibOsmHandler::renderMap()
     
     rendererPtr->updateLayer(MapRenderer::RenderLayer::Map, _canvas);
 }
+
+QPair<double, double> LibOsmHandler::getTopLeft()
+{
+    QPair<double, double> _coords;
+    
+    _coords.first = osmMapProjection.GetDimensions().GetTopLeft().GetLat();
+    _coords.second = osmMapProjection.GetDimensions().GetTopLeft().GetLon();
+
+    return _coords;
+}
+
+QPair<double, double> LibOsmHandler::getBottomRight()
+{
+    QPair<double, double> _coords;
+    
+    QPair<double, double> _topLeft = getTopLeft();
+
+    // Get difference between centerpoint and top left, and add that distance to get the bottom corner
+    // (for some reason GetDimensions().GetBottomRight() seems to buffer much farther than needed)
+    _coords.first = (2 * osmMapProjection.GetCenter().GetLat()) - _topLeft.first;
+    _coords.second = (2 * osmMapProjection.GetCenter().GetLon()) - _topLeft.second;
+
+    return _coords;
+}
+
+// TODO: Change moving to scale with magnification level rather than a constant.
+// This can result in some pretty drastic changes on deeper zoom levels
 
 void LibOsmHandler::moveUp()
 {

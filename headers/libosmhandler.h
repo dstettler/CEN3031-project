@@ -10,6 +10,7 @@
 #include <QVector>
 #include <QMutex>
 #include <QThread>
+#include <QPair>
 
 #include <osmscout/util/GeoBox.h>
 #include <osmscout/util/Projection.h>
@@ -23,6 +24,10 @@
 
 #define LIBOSMHANDLER_MOVE_CONSTANT 2.0
 #define LIBOSMHANDLER_ZOOM_SCALE 15.0
+
+#define LIBOSMHANDLER_DEFAULT_LAT 29.071
+#define LIBOSMHANDLER_DEFAULT_LON -81.35
+#define LIBOSMHANDLER_DEFAULT_MAG 70.0
 
 class LibOsmHandler
 {
@@ -56,6 +61,9 @@ class LibOsmHandler
 public:
     LibOsmHandler(QString appPath, MapRenderer *renderer);
     ~LibOsmHandler();
+
+    QPair<double, double> getTopLeft();
+    QPair<double, double> getBottomRight();
 
     void moveLeft();
     void moveRight();
