@@ -403,5 +403,7 @@ DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
     ReadConeFile(fileName + "/noaa_cache/0/cone/al172022_005Aadv_CONE.kml");
     ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al172022_005Aadv_WW.kml");
     qDebug() << CoordPerPixel(widthInPixels, heightInPixels);
+    for (int i = 0; i < warningsCoordinatesVector.size(); i++)
+        qDebug() << warningsCoordinatesVector[i].y;
 }
 
