@@ -19,40 +19,58 @@ void Drawing::drawTrack(DataBridge* context)
     for (int i = 0; i < trackCoordinates->size(); i++)
     {
         //Check if in bounds and draw if it is
-        if (trackCoordinates->at(i).x > 0 && trackCoordinates->at(i).x < rightBound.x &&
-            trackCoordinates->at(i).y > 0 && trackCoordinates->at(i).y < leftBound.y)
+        if (trackCoordinates->at(i).x < rightBound.x && trackCoordinates->at(i).x > leftBound.x &&
+            trackCoordinates->at(i).y > rightBound.y && trackCoordinates->at(i).y < leftBound.y)
         {
+
             //convert
             QPair<int,int> convertedCoords = context->LatLonToScreenCoord(trackCoordinates->at(i).x, trackCoordinates->at(i).y);
 
             //draw
-            int xCoord = convertedCoords.first;
-            int yCoord = convertedCoords.second;
+            int xCoord = qFabs(convertedCoords.first);
+            int yCoord = qFabs(convertedCoords.second);
 
-            _painter->setPen(Qt::white);
-            _painter->drawPoint(xCoord, yCoord);
+
+            _painter->setBrush(Qt::blue);
+            _painter->drawEllipse(QPointF(xCoord, yCoord), 5, 5);
+
         }
     }
 
 
 
     //------------------------Line----------------------------------//
-    //Save previous point variable
 
-    //Boolean (switch thing) to see if the previous point was out of bounds (Default: False, point is out of bound) (False: Out of bounds, True: In Bounds)
+    //Save previous point variable
+    QPair<int, int> previousPoint;
+    bool previousPointInBounds = false;
 
     for (int i = 0; i < trackCoordinates->size(); i++)
     {
 
-        //Check in bounds, if within bounds, then draw
+            //Check in bounds, if within bounds, then draw
+            if (trackCoordinates->at(i).x < rightBound.x && trackCoordinates->at(i).x > leftBound.x &&
+                trackCoordinates->at(i).y > rightBound.y && trackCoordinates->at(i).y < leftBound.y)
+            {
 
-        //Convert coords
+                //Convert coords
+                QPair<int, int> currentPoint = context->LatLonToScreenCoord(trackCoordinates->at(i).x,trackCoordinates->at(i).y);
+                currentPoint.first = qFabs(currentPoint.first);
+                currentPoint.second = qFabs(currentPoint.second);
 
-        //Draw it
+                if (previousPointInBounds)
+                {
+                    //Draw it
+                    _painter->setPen(Qt::blue);
+                    _painter->drawLine(previousPoint.first, previousPoint.second, currentPoint.first, currentPoint.second);
 
-        //Set the current point to previous point
+                }
 
-    }
+                //Set the current point to previous point and previousPointsInBounds
+                previousPoint = currentPoint;
+                previousPointInBounds = true;
+            }
+       }
 
     //Destructor
     delete _painter;

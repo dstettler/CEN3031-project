@@ -66,6 +66,7 @@ void MainWindow::onWindowShown()
 
     hurricaneDrawing.drawWarnings(dataBridge.get());
     hurricaneDrawing.drawCone(dataBridge.get());
+    hurricaneDrawing.drawTrack(dataBridge.get());
 
 
     mapRenderer.updateImage();
