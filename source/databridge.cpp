@@ -372,7 +372,7 @@ QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y)    //converts g
 {
     QPair<int, int> ScreenPoint;
     ScreenPoint.first = (x - boundBoxLeft.x)/CoordPerPixel(widthInPixels, heightInPixels).first;
-    ScreenPoint.second = (y - boundBoxRight.y)/CoordPerPixel(widthInPixels, heightInPixels).second;
+    ScreenPoint.second = (boundBoxLeft.y - y)/CoordPerPixel(widthInPixels, heightInPixels).second;
     return ScreenPoint;
 }
 
