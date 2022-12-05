@@ -73,7 +73,8 @@ void Drawing::drawCone(DataBridge* context)
     QPainter* _painter = new QPainter(&_canvas);
 
     //------------------------Dots----------------------------------//
-    for (int i = 0; i < coneCoordinates->size(); i++)
+    //commented out Dots because the lines just paint over them
+    /*for (int i = 0; i < coneCoordinates->size(); i++)
     {
         //Check if in bounds and draw if it is
         if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y > rightBound.y && coneCoordinates->at(i).y < leftBound.y)
@@ -91,24 +92,38 @@ void Drawing::drawCone(DataBridge* context)
             _painter->setPen(Qt::white);
             _painter->drawPoint(xCoord, yCoord);
         }
-    }
+    }*/
 
     //------------------------Line----------------------------------//
     //Save previous point variable
-
+    QPair<int, int> previousPoint;
     //Boolean (switch thing) to see if the previous point was out of bounds (Default: False, point is out of bound) (False: Out of bounds, True: In Bounds)
+    bool previousPointInBounds = false;
+
 
     for (int i = 0; i < coneCoordinates->size(); i++)
     {
 
         //Check in bounds, if within bounds, then draw
+        if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y > rightBound.y && coneCoordinates->at(i).y < leftBound.y)
+        {
+            //convert
+            QPair<int,int> currentPoint = context->LatLonToScreenCoord(coneCoordinates->at(i).x, coneCoordinates->at(i).y);
+            currentPoint.first = qFabs(currentPoint.first);
+            currentPoint.second = qFabs(currentPoint.second);
 
-        //Convert coords
+            if (previousPointInBounds)
+            {
+                //Draw it
+                _painter->setPen(Qt::white);
+                _painter->drawLine(previousPoint.first, previousPoint.second, currentPoint.first, currentPoint.second);
+            }
+            //Set the current point to previous point and previousPointsInBounds
+            previousPoint = currentPoint;
+            previousPointInBounds = true;
 
-        //Draw it
 
-        //Set the current point to previous point
-
+        }
     }
 
     //Destructor
@@ -120,6 +135,7 @@ void Drawing::drawCone(DataBridge* context)
 void Drawing::drawWarnings(DataBridge* context)
 {
     QVector<DataBridge::GeoPoint>*warningsCoordinates = context->GetWarningsCoordinatesVector();
+    QVector<DataBridge::WarningsPlacemark>* warningsData = context->GetWarningsDataVector();
     DataBridge::GeoPoint leftBound = context->GetBoundBoxLeft();
     DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();
 
@@ -129,43 +145,44 @@ void Drawing::drawWarnings(DataBridge* context)
     _canvas.fill(Qt::transparent);
     QPainter* _painter = new QPainter(&_canvas);
 
-    //------------------------Dots----------------------------------//
-    for (int i = 0; i < warningsCoordinates->size(); i++)
-    {
-        //Check if in bounds and draw if it is
-        if (warningsCoordinates->at(i).x < rightBound.x && warningsCoordinates->at(i).x > leftBound.x && warningsCoordinates->at(i).y > rightBound.y && warningsCoordinates->at(i).y < leftBound.y)
-        {
-            //convert
-            QPair<int,int> convertedCoords = context->LatLonToScreenCoord(warningsCoordinates->at(i).x, warningsCoordinates->at(i).y);
-
-            //draw
-            int xCoord = convertedCoords.first;
-            int yCoord = convertedCoords.second;
-
-            xCoord = qFabs(xCoord);
-            yCoord = qFabs(yCoord);
-
-            _painter->setPen(Qt::yellow);
-            _painter->drawPoint(xCoord, yCoord);
-        }
-    }
-
+    //no dots needed
     //------------------------Line----------------------------------//
     //Save previous point variable
 
     //Boolean (switch thing) to see if the previous point was out of bounds (Default: False, point is out of bound) (False: Out of bounds, True: In Bounds)
-    //lines should probably use the warningsData vector so that each warning area (in each placemark) has separate lines
-    for (int i = 0; i < warningsCoordinates->size(); i++)
-    {
+    //lines use the warningsData vector so that each warning area (in each placemark) has separate lines. Drawing dots above is also a bit redundant since the lines go over them.
+    for (int i = 0; i < warningsData->size(); i++)
+    {   //warningsData stores placemarks w the warning name and a vector of coordinates. This checks if the coordinates are for a watch or warning
+        if (warningsData->at(i).warningName.contains("Warning"))
+            _painter->setPen(Qt::red);
+        else if (warningsData->at(i).warningName.contains("Watch"))
+            _painter->setPen(Qt::yellow);
 
-        //Check in bounds, if within bounds, then draw
+        //Save previous point variable
+        QPair<int, int> previousPoint;
+        bool previousPointInBounds = false;
 
-        //Convert coords
+        //getting the coordinates vector of each placemark.
+        for (int j = 0; j < warningsData->at(i).warningsCoordinatesVector.size(); j++)
+        {
+            //Check in bounds, if within bounds, then draw
+            if (warningsData->at(i).warningsCoordinatesVector[j].x < rightBound.x && warningsData->at(i).warningsCoordinatesVector[j].x > leftBound.x && warningsData->at(i).warningsCoordinatesVector[j].y > rightBound.y && warningsData->at(i).warningsCoordinatesVector[j].y < leftBound.y)
+            {
+                //Convert coords
+                QPair<int, int> currentPoint = context->LatLonToScreenCoord(warningsData->at(i).warningsCoordinatesVector[j].x,warningsData->at(i).warningsCoordinatesVector[j].y);
+                currentPoint.first = qFabs(currentPoint.first);
+                currentPoint.second = qFabs(currentPoint.second);
 
-        //Draw it
-
-        //Set the current point to previous point
-
+                if (previousPointInBounds)
+                {
+                    //Draw it
+                    _painter->drawLine(previousPoint.first, previousPoint.second, currentPoint.first, currentPoint.second);
+                }
+                //Set the current point to previous point and previousPointsInBounds
+                previousPoint = currentPoint;
+                previousPointInBounds = true;
+            }
+       }
     }
 
     //Destructor

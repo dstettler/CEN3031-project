@@ -22,6 +22,10 @@ QVector<DataBridge::GeoPoint>* DataBridge::GetWarningsCoordinatesVector()
     return &warningsCoordinatesVector;
 }
 
+QVector<DataBridge::WarningsPlacemark>* DataBridge::GetWarningsDataVector()
+{
+    return &warningsData;
+}
 DataBridge::GeoPoint DataBridge::GetBoundBoxLeft()
 {
     return boundBoxLeft;
@@ -403,7 +407,5 @@ DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
     ReadConeFile(fileName + "/noaa_cache/0/cone/al172022_005Aadv_CONE.kml");
     ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al172022_005Aadv_WW.kml");
     qDebug() << CoordPerPixel(widthInPixels, heightInPixels);
-    for (int i = 0; i < warningsCoordinatesVector.size(); i++)
-        qDebug() << warningsCoordinatesVector[i].y;
 }
 

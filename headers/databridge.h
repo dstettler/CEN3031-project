@@ -58,6 +58,7 @@ public:
     QVector<GeoPoint>* GetTrackCoordinatesVector();
     QVector<GeoPoint>* GetConeCoordinatesVector();
     QVector<GeoPoint>* GetWarningsCoordinatesVector();
+    QVector<WarningsPlacemark>* GetWarningsDataVector();
     GeoPoint GetBoundBoxLeft();
     GeoPoint GetBoundBoxRight();
     MapRenderer* GetMapRendererPtr();
