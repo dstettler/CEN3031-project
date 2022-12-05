@@ -115,15 +115,15 @@ void Drawing::drawCone(DataBridge* context)
             if (previousPointInBounds)
             {
                 //Draw it
-                _painter->setPen(Qt::white);
+                _painter->setPen(QPen(Qt::white, 3)); //the number is thickness in pixels
                 _painter->drawLine(previousPoint.first, previousPoint.second, currentPoint.first, currentPoint.second);
             }
             //Set the current point to previous point and previousPointsInBounds
             previousPoint = currentPoint;
             previousPointInBounds = true;
-
-
         }
+        else    //this ensures that the last point before going out of bounds doesnt connect to the first point after coming back. coz we dont want that.
+            previousPointInBounds = false;
     }
 
     //Destructor
@@ -154,9 +154,9 @@ void Drawing::drawWarnings(DataBridge* context)
     for (int i = 0; i < warningsData->size(); i++)
     {   //warningsData stores placemarks w the warning name and a vector of coordinates. This checks if the coordinates are for a watch or warning
         if (warningsData->at(i).warningName.contains("Warning"))
-            _painter->setPen(Qt::red);
+            _painter->setPen(QPen(Qt::red, 3));
         else if (warningsData->at(i).warningName.contains("Watch"))
-            _painter->setPen(Qt::yellow);
+            _painter->setPen(QPen(Qt::yellow, 3));  //the number is thickness in pixels
 
         //Save previous point variable
         QPair<int, int> previousPoint;
@@ -182,6 +182,8 @@ void Drawing::drawWarnings(DataBridge* context)
                 previousPoint = currentPoint;
                 previousPointInBounds = true;
             }
+            else
+                previousPointInBounds = false;
        }
     }
 
