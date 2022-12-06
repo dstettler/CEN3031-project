@@ -3,6 +3,8 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QPixmap>
+#include <QDir>
+#include <QMessageBox>
 
 ReliefFundsDialog::ReliefFundsDialog(QWidget *parent) :
     QDialog(parent),
@@ -10,10 +12,32 @@ ReliefFundsDialog::ReliefFundsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //For Mac
+    #ifdef Q_OS_MACX
+        QDir test(QDir::currentPath());
+
+        //Go up from .app
+        test.cdUp();
+        test.cdUp();
+        test.cdUp();
+
+        QString tempString;
+
+        QFileInfo fi(test, tempString);
+        QString _fileName = fi.canonicalFilePath();
+
+    //For Windows
+    #else
+        QString _fileName = QDir::currentPath();
+    #endif
+
+    QMessageBox _m;
+    _m.setText(_fileName);
+    _m.exec();
     //Images we want in the relief funds page
-    QPixmap redCrossImage("/Users/johnnyhuynh/Downloads/RedCrossImage.png");
-    QPixmap directReliefImage("/Users/johnnyhuynh/Downloads/DirectReliefImage.png");
-    QPixmap disasterFundImage("/Users/johnnyhuynh/Downloads/DisasterFundImage.png");
+    QPixmap redCrossImage(_fileName + "/images/RedCrossImage.png");
+    QPixmap directReliefImage(_fileName + "/images/DirectReliefImage.png");
+    QPixmap disasterFundImage(_fileName + "/images/DisasterFundImage.png");
 
     //Setting the QLabels to the image
     ui->RedCrossImage->setPixmap(redCrossImage);
