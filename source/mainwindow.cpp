@@ -71,6 +71,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             return;
         }
 
+        dataBridge->SetBoundBoxLeft(osmHandler->getTopLeft());
+        dataBridge->SetBoundBoxRight(osmHandler->getBottomRight());
+
+        hurricaneDrawing.drawWarnings(dataBridge.get());
+        hurricaneDrawing.drawCone(dataBridge.get());
+        hurricaneDrawing.drawTrack(dataBridge.get());
+
         osmHandler->renderMap();
         mapRenderer.updateImage();
     }
@@ -96,11 +103,6 @@ void MainWindow::onWindowShown()
 
     osmHandler = QSharedPointer<LibOsmHandler>(new LibOsmHandler(buildPath, &mapRenderer));
 
-    // Initial map image render
-    osmHandler->renderMap();
-    mapRenderer.updateImage();
-
-    windowShownSwitch = true;
     
     //For Mac
     #ifdef Q_OS_MACX
@@ -135,7 +137,11 @@ void MainWindow::onWindowShown()
     hurricaneDrawing.drawTrack(dataBridge.get());
 
 
+    // Initial map image render
+    osmHandler->renderMap();
     mapRenderer.updateImage();
+
+    windowShownSwitch = true;
 
 }
 

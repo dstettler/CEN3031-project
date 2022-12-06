@@ -37,7 +37,6 @@ public:
     
     bool updateLayer(RenderLayer layer, QPixmap newPixmap);
     void updateImage();
-    QPair<int, int> getOpenGLNodeSize();
     void updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode);
 
     QPair<int, int> getOpenGLNodeSize();

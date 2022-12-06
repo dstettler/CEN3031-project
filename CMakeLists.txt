@@ -17,7 +17,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CFLAGS} -static-libgcc -st
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt
 # at the moment for some reason
-list(APPEND CMAKE_PREFIX_PATH "D:/Qt/5.15.2/mingw81_64/lib/cmake")
+set(CMAKE_PREFIX_PATH "D:/Qt/5.15.2/mingw81_64/lib/cmake")
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
@@ -35,7 +35,7 @@ find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
 # message(WARNING ${QT_VERSION_MINOR})
 
 # Finding the components, ditto what I said below when linking OpenGL
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui OpenGLWidgets Xml)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui Xml)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
 
 # Find Python components
@@ -94,7 +94,6 @@ target_link_libraries(HurrigatorsProject PRIVATE
 
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::OpenGLWidgets
     Qt${QT_VERSION_MAJOR}::Xml
 )
 
