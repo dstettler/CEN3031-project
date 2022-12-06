@@ -2,6 +2,7 @@
 #include "headers/maprenderer.h"
 #include "headers/rendereropenglwidget.h"
 #include "headers/libosmhandler.h"
+#include "headers/relieffundsdialog.h"
 
 #include "ui_mainwindow.h"
 #include "headers/databridge.h"
@@ -85,7 +86,8 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::on_pushButton_clicked()
 {
-    // Relief funds window will be launched here
+    ReliefFundsDialog _diag;
+    _diag.exec();
 }
 
 
