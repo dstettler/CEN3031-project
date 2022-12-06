@@ -4,7 +4,6 @@
 #include <QUrl>
 #include <QPixmap>
 #include <QDir>
-#include <QMessageBox>
 
 ReliefFundsDialog::ReliefFundsDialog(QWidget *parent) :
     QDialog(parent),
@@ -31,9 +30,6 @@ ReliefFundsDialog::ReliefFundsDialog(QWidget *parent) :
         QString _fileName = QDir::currentPath();
     #endif
 
-    QMessageBox _m;
-    _m.setText(_fileName);
-    _m.exec();
     //Images we want in the relief funds page
     QPixmap redCrossImage(_fileName + "/images/RedCrossImage.png");
     QPixmap directReliefImage(_fileName + "/images/DirectReliefImage.png");
