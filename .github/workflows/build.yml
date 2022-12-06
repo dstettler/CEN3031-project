@@ -42,7 +42,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-c-cpp@v1
       - name: Run cmake
         run: |
-          DXSDK_DIR=${MINGW_PREFIX}/${MINGW_CHOST} cmake -G "Ninja" -B build 
+          cmake -G "Ninja" -B build 
       - name: Run build
         run: |
           cmake --build build
