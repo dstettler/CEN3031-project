@@ -22,12 +22,12 @@
 
 #include <osmscoutmapqt/MapPainterQt.h>
 
-#define LIBOSMHANDLER_MOVE_CONSTANT 2.0
-#define LIBOSMHANDLER_ZOOM_SCALE 15.0
+constexpr double LIBOSMHANDLER_MOVE_CONSTANT = 2.0;
+constexpr double LIBOSMHANDLER_ZOOM_SCALE = 15.0;
 
-#define LIBOSMHANDLER_DEFAULT_LAT 29.071
-#define LIBOSMHANDLER_DEFAULT_LON -81.35
-#define LIBOSMHANDLER_DEFAULT_MAG 70.0
+constexpr double LIBOSMHANDLER_DEFAULT_LAT = 29.071;
+constexpr double LIBOSMHANDLER_DEFAULT_LON = -81.35;
+constexpr double LIBOSMHANDLER_DEFAULT_MAG = 70.0;
 
 class LibOsmHandler
 {
@@ -49,18 +49,17 @@ class LibOsmHandler
     osmscout::MercatorProjection osmMapProjection;
     osmscout::MapData osmMapData;
 
-    osmscout::MapPainterQt *osmPainterQt;
+    QSharedPointer<osmscout::MapPainterQt> osmPainterQt;
 
     void openDatabase(QString dbPath);
     void openStyles(QString stylePath);
     void dbConfig(QString dbPath);
     void loadData();
-    void loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles);
+    void loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles) const;
     void paintWithPainter(QPainter *painter);
 
 public:
     LibOsmHandler(QString appPath, MapRenderer *renderer);
-    ~LibOsmHandler();
 
     QPair<double, double> getTopLeft();
     QPair<double, double> getBottomRight();

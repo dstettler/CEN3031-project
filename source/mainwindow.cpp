@@ -20,14 +20,13 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , mapRenderer()
+    , mapRenderer(),
+    windowShownSwitch(false)
 {
     ui->setupUi(this);
 
     // Signal and slot to ensure events are not called until everything has been initialized
     connect(this, &MainWindow::windowShown, this, &MainWindow::onWindowShown);
-    
-    windowShownSwitch = false;
 
     ui->pushButton->setFocusPolicy(Qt::NoFocus);
 }
@@ -84,7 +83,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked() const
 {
     ReliefFundsDialog _diag;
     _diag.exec();

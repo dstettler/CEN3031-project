@@ -18,21 +18,11 @@
 
 LibOsmHandler::LibOsmHandler(QString appPath, MapRenderer *renderer)
     :appPath(appPath),
-    rendererPtr(renderer),
-    osmPainterQt(nullptr),
-    osmDbRef(nullptr),
-    osmMapServiceRef(nullptr),
-    osmStyleConfigRef(nullptr)
+    rendererPtr(renderer)
 {
     openDatabase(appPath + "/map");
     openStyles(appPath + "/stylesheets/standard.oss");
     dbConfig(appPath + "/map");
-}
-
-LibOsmHandler::~LibOsmHandler()
-{
-    if (osmPainterQt)
-        delete osmPainterQt;
 }
 
 void LibOsmHandler::openDatabase(QString dbPath)
@@ -88,11 +78,8 @@ void LibOsmHandler::dbConfig(QString dbPath)
 
 void LibOsmHandler::loadData()
 {
-    if (osmPainterQt)
-        delete osmPainterQt;
-
     osmTileRefList.clear();
-    osmPainterQt = new osmscout::MapPainterQt(osmStyleConfigRef);
+    osmPainterQt.reset(new osmscout::MapPainterQt(osmStyleConfigRef));
 
     osmMapData.ClearDBData();
 
@@ -104,7 +91,7 @@ void LibOsmHandler::loadData()
     loadBaseMapTiles(osmMapData.baseMapTiles);
 }
 
-void LibOsmHandler::loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles)
+void LibOsmHandler::loadBaseMapTiles(std::list<osmscout::GroundTile> &tiles) const
 {
     if (!osmBasemapDb)
     {
@@ -153,7 +140,7 @@ void LibOsmHandler::renderMap()
     QPair<int, int> _canvasSize = rendererPtr->getOpenGLNodeSize();
     QPixmap _canvas(_canvasSize.first, _canvasSize.second);
     _canvas.fill(Qt::transparent);
-    QPainter *painter = new QPainter(&_canvas);
+    auto painter = new QPainter(&_canvas);
 
     // Data must be loaded here to reload the tiles within the current projection view before drawing
     loadData();
@@ -188,9 +175,6 @@ QPair<double, double> LibOsmHandler::getBottomRight()
 
     return _coords;
 }
-
-// TODO: Change moving to scale with magnification level rather than a constant.
-// This can result in some pretty drastic changes on deeper zoom levels
 
 void LibOsmHandler::moveUp()
 {

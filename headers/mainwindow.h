@@ -27,7 +27,7 @@ public Q_SLOTS:
     void onWindowShown();
 
 private Q_SLOTS:
-    void on_pushButton_clicked();
+    void on_pushButton_clicked() const;
 
 Q_SIGNALS:
     void windowShown();
