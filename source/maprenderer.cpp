@@ -14,6 +14,13 @@ MapRenderer::MapRenderer()
     {
         addLayer(_baseLayer);
     }
+
+  openGLNodeSize = QPair<int, int>(0,0);
+}
+
+QPair<int, int> MapRenderer::getOpenGLNodeSize()
+{
+    return openGLNodeSize;
 }
 
 void MapRenderer::updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode)
@@ -30,10 +37,10 @@ void MapRenderer::addLayer(QPixmap pixmap)
 
 bool MapRenderer::updateLayer(MapRenderer::RenderLayer layer, QPixmap newPixmap)
 {
-    if (layer < layers.size() && static_cast<unsigned int>(layer) >= 0)
+    if (static_cast<int>(layer) < layers.size() && static_cast<int>(layer) >= 0)
     {
-        layers.remove(layer);
-        layers.insert(layer, newPixmap);
+        layers.remove(static_cast<int>(layer));
+        layers.insert(static_cast<int>(layer), newPixmap);
         return true;
     }
     else
@@ -46,6 +53,8 @@ void MapRenderer::generateCompositeFromLayers()
 {
     QPixmap _canvas(openGLNodeSize.first, openGLNodeSize.second);
     
+    _canvas.fill(Qt::transparent);
+
     // Use a regular pointer in place of a smart pointer to ensure a delete call can be made
     // before the pixmap is assigned (to ensure the framebuffer has finished drawing)
     QPainter* _painter = new QPainter(&_canvas);
@@ -78,9 +87,4 @@ void MapRenderer::updateImage()
 
     openGLNode->updateComposite(composite);
     openGLNode->update();
-}
-
-QPair<int, int> MapRenderer::getOpenGLNodeSize()
-{
-    return openGLNodeSize;
 }

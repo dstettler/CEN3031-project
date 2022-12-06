@@ -12,7 +12,7 @@
 class MapRenderer
 {
 public:
-    enum RenderLayer
+    enum class RenderLayer
     {
         Map = 0,
         Warnings = 1,
@@ -37,6 +37,7 @@ public:
     
     bool updateLayer(RenderLayer layer, QPixmap newPixmap);
     void updateImage();
+    QPair<int, int> getOpenGLNodeSize();
     void updateOpenGLNode(QSharedPointer<RendererOpenGLWidget> openGLNode);
 
     QPair<int, int> getOpenGLNodeSize();

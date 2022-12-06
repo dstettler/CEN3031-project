@@ -6,6 +6,9 @@
 
 #include <QMainWindow>
 #include <QSharedPointer>
+#include <QSharedPointer>
+#include "headers/databridge.h"
+#include "headers/drawing.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,6 +40,10 @@ private:
     QSharedPointer<LibOsmHandler> osmHandler;
 
     bool windowShownSwitch;
+
+    //DataBridge Pointer
+    QSharedPointer<DataBridge> dataBridge;
+    Drawing hurricaneDrawing;
 
     Ui::MainWindow *ui;
 };
