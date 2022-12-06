@@ -152,7 +152,7 @@ void Drawing::drawCone(DataBridge* context)
 
 void Drawing::drawWarnings(DataBridge* context)
 {
-    QVector<DataBridge::GeoPoint>*warningsCoordinates = context->GetWarningsCoordinatesVector();
+    //QVector<DataBridge::GeoPoint>*warningsCoordinates = context->GetWarningsCoordinatesVector();
     QVector<DataBridge::WarningsPlacemark>* warningsData = context->GetWarningsDataVector();
     DataBridge::GeoPoint leftBound = context->GetBoundBoxLeft();
     DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();

@@ -348,10 +348,10 @@ void DataBridge::ReadTrackFile(QString fileName)
                                 QString zCoord = track.mid(0, delimiter);
                                 zCoord.remove(zCoord.length() - 1, 1); // removes extra white space at end
 
-                                //convert strings to int
-                                int x = xCoord.toFloat();
-                                int y = yCoord.toFloat();
-                                int z = zCoord.toFloat();
+                                //convert strings to float
+                                float x = xCoord.toFloat();
+                                float y = yCoord.toFloat();
+                                float z = zCoord.toFloat();
 
                                 //create struct and add to vector of structs
                                 trackCoordinates.push_back(GeoPoint(x, y, z));
@@ -406,6 +406,5 @@ DataBridge::DataBridge(QString fileName, MapRenderer *renderer)
     ReadTrackFile(fileName + "/noaa_cache/0/track/al172022_005Aadv_TRACK.kml");
     ReadConeFile(fileName + "/noaa_cache/0/cone/al172022_005Aadv_CONE.kml");
     ReadWarningsFile(fileName + "/noaa_cache/0/warnings/al172022_005Aadv_WW.kml");
-    qDebug() << CoordPerPixel(widthInPixels, heightInPixels);
 }
 
