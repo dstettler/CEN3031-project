@@ -34,7 +34,7 @@ find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
 
 # Finding the components, ditto what I said below when linking OpenGL
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Gui)
-find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Widgets Xml)
 
 # Find Python components
 find_package(Python COMPONENTS Interpreter Development REQUIRED)
