@@ -9,6 +9,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-2019
+    defaults:
+      run:
+        shell: msys {0}
     env:
       SONAR_SCANNER_VERSION: 4.7.0.2747
       SONAR_SERVER_URL: "https://sonarcloud.io"
@@ -30,9 +33,10 @@ jobs:
                     mingw-w64-x86_64-cairo mingw-w64-x86_64-pango
                     mingw-w64-x86_64-qt5
                     mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-glm"
-      -name: Add msys2 to PATH
-      run: |
-        $env:Path = 'C:\foo;' + $env:Path 
+
+      - name: Add msys2 to PATH
+        run: |
+          $env:Path = 'C:\foo;' + $env:Path 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
         with:
