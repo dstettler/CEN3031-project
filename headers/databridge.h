@@ -44,7 +44,7 @@ public:
 
     // conversion from earth coordinates to on screen coordinates
     QPair<float, float> CoordPerPixel(int widthInPixels, int heightInPixels) const;
-    QPair<int,int> LatLonToScreenCoord(float x, float y);
+    QPair<int,int> LatLonToScreenCoord(float x, float y) const;
 
 
     // constructor

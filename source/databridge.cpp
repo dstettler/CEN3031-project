@@ -369,7 +369,7 @@ void DataBridge::ReadTrackFile(QString fileName)
 }
 
 //---------------------------CONVERSION FROM EARTH COORD TO ON-SCREEN COORD-----------------------------//
-QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y)    //converts geo coords to screen coords
+QPair<int,int> DataBridge::LatLonToScreenCoord(float x, float y) const    //converts geo coords to screen coords
 {
     QPair<int, int> ScreenPoint;
     ScreenPoint.first = (int) ((x - boundBoxLeft.x)/CoordPerPixel(widthInPixels, heightInPixels).first);
