@@ -51,7 +51,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>13</pointsize>
+     <pointsize>11</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -79,7 +79,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>13</pointsize>
+     <pointsize>11</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -107,7 +107,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>13</pointsize>
+     <pointsize>11</pointsize>
      <italic>true</italic>
     </font>
    </property>
