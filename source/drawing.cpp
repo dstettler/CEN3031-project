@@ -5,31 +5,28 @@
 
 void Drawing::drawTrack(DataBridge* context)
 {
-    QVector<DataBridge::GeoPoint>* trackCoordinates = context->GetTrackCoordinatesVector();
+    const QVector<DataBridge::GeoPoint>* trackCoordinates = context->GetTrackCoordinatesVector();
     DataBridge::GeoPoint leftBound = context->GetBoundBoxLeft();
     DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();
 
     //Set up painting
-    QPair<int,int> _canvasSize = context->GetMapRendererPtr()->getOpenGLNodeSize();
-    QPixmap _canvas(_canvasSize.first, _canvasSize.second);
+    auto [canvasX, canvasY] = context->GetMapRendererPtr()->getOpenGLNodeSize();
+    QPixmap _canvas(canvasX, canvasY);
     _canvas.fill(Qt::transparent);
-    QPainter* _painter = new QPainter(&_canvas);
+    auto _painter = new QPainter(&_canvas);
 
     //------------------------Dots----------------------------------//
-    for (int i = 0; i < trackCoordinates->size(); i++)
+    for (DataBridge::GeoPoint point : *trackCoordinates)
     {
         //Check if in bounds and draw if it is
-        if (trackCoordinates->at(i).x < rightBound.x && trackCoordinates->at(i).x > leftBound.x &&
-            trackCoordinates->at(i).y > rightBound.y && trackCoordinates->at(i).y < leftBound.y)
+        if (point.x < rightBound.x && point.x > leftBound.x && point.y > rightBound.y && point.y < leftBound.y)
         {
-
             //convert
-            QPair<int,int> convertedCoords = context->LatLonToScreenCoord(trackCoordinates->at(i).x, trackCoordinates->at(i).y);
+            auto [convertedX, convertedY] = context->LatLonToScreenCoord(point.x, point.y);
 
             //draw
-            int xCoord = qFabs(convertedCoords.first);
-            int yCoord = qFabs(convertedCoords.second);
-
+            int xCoord = (int) qFabs(convertedX);
+            int yCoord = (int) qFabs(convertedY);
 
             _painter->setBrush(Qt::blue);
             _painter->drawEllipse(QPointF(xCoord, yCoord), 5, 5);
@@ -37,24 +34,21 @@ void Drawing::drawTrack(DataBridge* context)
         }
     }
 
-
-
     //------------------------Line----------------------------------//
 
     //Save previous point variable
     QPair<int, int> previousPoint;
     bool previousPointInBounds = false;
 
-    for (int i = 0; i < trackCoordinates->size(); i++)
+    for (DataBridge::GeoPoint point : *trackCoordinates)
     {
 
             //Check in bounds, if within bounds, then draw
-            if (trackCoordinates->at(i).x < rightBound.x && trackCoordinates->at(i).x > leftBound.x &&
-                trackCoordinates->at(i).y > rightBound.y && trackCoordinates->at(i).y < leftBound.y)
+            if (point.x < rightBound.x && point.x > leftBound.x && point.y > rightBound.y && point.y < leftBound.y)
             {
 
                 //Convert coords
-                QPair<int, int> currentPoint = context->LatLonToScreenCoord(trackCoordinates->at(i).x,trackCoordinates->at(i).y);
+                QPair<int, int> currentPoint = context->LatLonToScreenCoord(point.x,point.y);
                 currentPoint.first = qFabs(currentPoint.first);
                 currentPoint.second = qFabs(currentPoint.second);
 
@@ -85,32 +79,10 @@ void Drawing::drawCone(DataBridge* context)
     DataBridge::GeoPoint rightBound = context->GetBoundBoxRight();
 
     //Set up painting
-    QPair<int,int> _canvasSize = context->GetMapRendererPtr()->getOpenGLNodeSize();
-    QPixmap _canvas(_canvasSize.first, _canvasSize.second);
+    auto[canvasX, canvasY] = context->GetMapRendererPtr()->getOpenGLNodeSize();
+    QPixmap _canvas(canvasX, canvasY);
     _canvas.fill(Qt::transparent);
-    QPainter* _painter = new QPainter(&_canvas);
-
-    //------------------------Dots----------------------------------//
-    //commented out Dots because the lines just paint over them
-    /*for (int i = 0; i < coneCoordinates->size(); i++)
-    {
-        //Check if in bounds and draw if it is
-        if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y > rightBound.y && coneCoordinates->at(i).y < leftBound.y)
-        {
-            //convert
-            QPair<int,int> convertedCoords = context->LatLonToScreenCoord(coneCoordinates->at(i).x, coneCoordinates->at(i).y);
-
-            //draw
-            int xCoord = convertedCoords.first;
-            int yCoord = convertedCoords.second;
-
-            xCoord = qFabs(xCoord);
-            yCoord = qFabs(yCoord);
-
-            _painter->setPen(Qt::white);
-            _painter->drawPoint(xCoord, yCoord);
-        }
-    }*/
+    auto _painter = new QPainter(&_canvas);
 
     //------------------------Line----------------------------------//
     //Save previous point variable
@@ -119,14 +91,14 @@ void Drawing::drawCone(DataBridge* context)
     bool previousPointInBounds = false;
 
 
-    for (int i = 0; i < coneCoordinates->size(); i++)
+    for (DataBridge::GeoPoint point : *coneCoordinates)
     {
 
         //Check in bounds, if within bounds, then draw
-        if (coneCoordinates->at(i).x < rightBound.x && coneCoordinates->at(i).x > leftBound.x && coneCoordinates->at(i).y > rightBound.y && coneCoordinates->at(i).y < leftBound.y)
+        if (point.x < rightBound.x && point.x > leftBound.x && point.y > rightBound.y && point.y < leftBound.y)
         {
             //convert
-            QPair<int,int> currentPoint = context->LatLonToScreenCoord(coneCoordinates->at(i).x, coneCoordinates->at(i).y);
+            QPair<int,int> currentPoint = context->LatLonToScreenCoord(point.x, point.y);
             currentPoint.first = qFabs(currentPoint.first);
             currentPoint.second = qFabs(currentPoint.second);
 

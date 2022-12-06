@@ -37,10 +37,10 @@ void MapRenderer::addLayer(QPixmap pixmap)
 
 bool MapRenderer::updateLayer(MapRenderer::RenderLayer layer, QPixmap newPixmap)
 {
-    if (layer < layers.size() && layer >= 0)
+    if (static_cast<int>(layer) < layers.size() && static_cast<int>(layer) >= 0)
     {
-        layers.remove(layer);
-        layers.insert(layer, newPixmap);
+        layers.remove(static_cast<int>(layer));
+        layers.insert(static_cast<int>(layer), newPixmap);
         return true;
     }
     else

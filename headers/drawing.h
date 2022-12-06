@@ -6,9 +6,6 @@
 
 class Drawing
 {
-private:
-    float coordsPerPixel;
-
 public:
     void drawCone(DataBridge* context);
     void drawTrack(DataBridge* context);

@@ -14,14 +14,12 @@ public:
     {
         //Constructor
         GeoPoint(float x, float y, float z)
+            :x(x),
+             y(y),
+             z(z)
         {
-            this->x = x;
-            this->y = y;
-            this->z = z;
-        }
 
-        //Default constructor
-        GeoPoint() {};
+        }
 
         float x;
         float y;
@@ -36,32 +34,34 @@ public:
 
         //constructor
         WarningsPlacemark(QString warningName, QString advisoryDate, QVector<GeoPoint>& _warningsCoordinatesVector)
+            :warningName(warningName),
+             advisoryDate(advisoryDate),
+             warningsCoordinatesVector(_warningsCoordinatesVector)
         {
-            this->warningName = warningName;
-            this->advisoryDate = advisoryDate;
-            for (int i = 0; i < _warningsCoordinatesVector.size(); i++)
-                warningsCoordinatesVector.push_back(_warningsCoordinatesVector[i]);
+
         }
     };
 
     // conversion from earth coordinates to on screen coordinates
-    QPair<float, float> CoordPerPixel(int widthInPixels, int heightInPixels);
+    QPair<float, float> CoordPerPixel(int widthInPixels, int heightInPixels) const;
     QPair<int,int> LatLonToScreenCoord(float x, float y);
 
 
     // constructor
     DataBridge(QString fileName, MapRenderer *renderer);
 
-    QPair<float, float> getBoundBoxLats;
-
     //Getter functions
     QVector<GeoPoint>* GetTrackCoordinatesVector();
     QVector<GeoPoint>* GetConeCoordinatesVector();
     QVector<GeoPoint>* GetWarningsCoordinatesVector();
     QVector<WarningsPlacemark>* GetWarningsDataVector();
-    GeoPoint GetBoundBoxLeft();
-    GeoPoint GetBoundBoxRight();
+    GeoPoint GetBoundBoxLeft() const;
+    GeoPoint GetBoundBoxRight() const;
     MapRenderer* GetMapRendererPtr();
+
+    //Setter functions
+    void SetBoundBoxLeft(QPair<double, double> p);
+    void SetBoundBoxRight(QPair<double, double> p);
 
 private:
     //Functions
@@ -75,8 +75,8 @@ private:
     QVector<GeoPoint> coneCoordinatesVector;
     QVector<GeoPoint> warningsCoordinatesVector;        //might only need this and not warnings data but lets see, this stores all coordinates
     QVector<WarningsPlacemark> warningsData;
-    GeoPoint boundBoxLeft;  //y is lattitudes, x is longs
-    GeoPoint boundBoxRight;
+    GeoPoint boundBoxLeft = GeoPoint(-89.3958f, 34.0412f, 0.0f);  //y is lattitudes, x is longs
+    GeoPoint boundBoxRight =  GeoPoint(-73.3042f, 24.1008f, 0.0f);
     int widthInPixels;
     int heightInPixels;
     MapRenderer *mapRendererPtr;

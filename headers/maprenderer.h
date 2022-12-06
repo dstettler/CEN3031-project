@@ -12,7 +12,7 @@
 class MapRenderer
 {
 public:
-    enum RenderLayer
+    enum class RenderLayer
     {
         Map = 0,
         Warnings = 1,
