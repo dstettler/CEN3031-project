@@ -8,7 +8,10 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: msys {0}
     env:
       SONAR_SCANNER_VERSION: 4.7.0.2747
       SONAR_SERVER_URL: "https://sonarcloud.io"
@@ -19,15 +22,6 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           submodules: recursive
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          host: windows
-          target: "desktop"
-          version: ${{ env.QT_VERSION }}
-          arch: win64_mingw81
-          dir: "${{github.workspace}}/qt"
-          install-deps: "true"
       - name: Setup MSYS/MINGW64
         uses: msys2/setup-msys2@v2
         with:
@@ -39,12 +33,6 @@ jobs:
                     mingw-w64-x86_64-cairo mingw-w64-x86_64-pango
                     mingw-w64-x86_64-qt5
                     mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-glm"
-      - name: Set Qt path and refresh
-        run: |
-          echo "${{github.workspace}}/qt/Qt/${{ env.QT_VERSION }}/${{ env.MINGW_PATH }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          refreshenv
-          #Write-Output (Get-Command g++.exe).Path
-          #g++.exe --version
 
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -67,7 +55,7 @@ jobs:
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
       - name: Run cmake
         run: |
-          cmake -G "Ninja" -B build 
+          DXSDK_DIR=${MINGW_PREFIX}/${MINGW_CHOST} cmake -G "Ninja" -B build 
       - name: Run build
         run: |
           cmake --build build
