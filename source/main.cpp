@@ -27,9 +27,35 @@ int main(int argc, char *argv[])
     Py_Initialize();
 
     PyObject *_sysPath = PySys_GetObject((char*)"path");
-    PyList_Append(_sysPath, PyUnicode_FromString("./python"));
 
-    QString _pythonPath = QDir::currentPath() + "/python/main.py";
+    //For Mac
+    #ifdef Q_OS_MACX
+
+        PyList_Append(_sysPath, PyUnicode_FromString("../../../python"));
+
+    //For Windows
+    #else
+        PyList_Append(_sysPath, PyUnicode_FromString("./python"));
+    #endif
+
+    //For Mac
+    #ifdef Q_OS_MACX
+        QDir test(QDir::currentPath());
+
+        //Go up from .app
+        test.cdUp();
+        test.cdUp();
+        test.cdUp();
+
+        QString tempString;
+
+        QFileInfo fi(test, tempString);
+        QString _pythonPath = fi.canonicalFilePath() + "/python/main.py";
+
+    //For Windows
+    #else
+        QString _pythonPath = QDir::currentPath() + "/python/main.py";
+    #endif
 
     PyObject *_pObj = Py_BuildValue("s", _pythonPath.toStdString().c_str());
     FILE *_pyFp = _Py_fopen_obj(_pObj, "r+");

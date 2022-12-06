@@ -26,7 +26,7 @@ def unzip_file(filepath: str, extractpath: str) -> None:
 
 def parse_kmz_from_html(filepath: str) -> List[Dict[str, str]]:
     parser = kmzhtmlparser.KmzHtmlParser()
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r', encoding="utf-8") as f:
         parser.feed(f.read())
 
         urls = []
