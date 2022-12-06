@@ -17,7 +17,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ADDITIONAL_CFLAGS} -static-libgcc -st
 # Point this to the absolute path of your personal Qt install
 # This is annoying, but the 'offcial' way to configure this for Qt
 # at the moment for some reason
-set(CMAKE_PREFIX_PATH "C:/Qt/6.3.2/mingw_64/lib/cmake")
+list(APPEND CMAKE_PREFIX_PATH "D:/Qt/5.15.2/mingw81_64/lib/cmake")
 
 # Needed to ensure the AutoUic can find the ui form mocs
 set(CMAKE_AUTOUIC_SEARCH_PATHS "forms")
