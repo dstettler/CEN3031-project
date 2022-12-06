@@ -49,7 +49,7 @@ jobs:
           cmake -G "Ninja" -B build 
       - name: Run build
         run: |
-          build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build
+        cmake --build build
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
