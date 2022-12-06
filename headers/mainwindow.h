@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include "headers/maprenderer.h"
+#include <QSharedPointer>
+#include "headers/databridge.h"
+#include "headers/drawing.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,6 +28,10 @@ Q_SIGNALS:
 
 private:
     MapRenderer mapRenderer;
+
+    //DataBridge Pointer
+    QSharedPointer<DataBridge> dataBridge;
+    Drawing hurricaneDrawing;
 
     Ui::MainWindow *ui;
 };

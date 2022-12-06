@@ -43,10 +43,12 @@ find_package(Python COMPONENTS Interpreter Development REQUIRED)
 set(PROJECT_SOURCES
     forms/mainwindow.ui
 
+
     headers/databridge.h
     headers/libosmhandler.h
     headers/mainwindow.h
     headers/maprenderer.h
+    headers/drawing.h
 
     headers/rendereropenglwidget.h
     source/rendereropenglwidget.cpp
@@ -56,6 +58,7 @@ set(PROJECT_SOURCES
     source/main.cpp
     source/mainwindow.cpp
     source/maprenderer.cpp
+    source/drawing.cpp
 )
 
 # Just in case compiling with Qt6 in the future
@@ -89,7 +92,6 @@ target_link_libraries(HurrigatorsProject PRIVATE
 
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
-
     Qt${QT_VERSION_MAJOR}::Xml
 )
 
