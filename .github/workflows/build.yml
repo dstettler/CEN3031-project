@@ -42,6 +42,7 @@ jobs:
         env:
           SONAR_SCANNER_DOWNLOAD_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${{ env.SONAR_SCANNER_VERSION }}-windows.zip
         run: |
+          powershell
           New-Item -Force -ItemType directory -Path $HOME\.sonar
           curl -sSLo $HOME\.sonar\sonar-scanner.zip ${{ env.SONAR_SCANNER_DOWNLOAD_URL }}
           unzip -o $HOME\.sonar\sonar-scanner.zip -d $HOME\.sonar\
@@ -53,6 +54,7 @@ jobs:
           curl -sSLo $HOME\.sonar\build-wrapper.zip ${{ env.BUILD_WRAPPER_DOWNLOAD_URL }}
           unzip -o $HOME\.sonar\build-wrapper.zip -d $HOME\.sonar\
           echo "$HOME\.sonar\build-wrapper-win-x86" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8
+          exit
       - name: Run cmake
         run: |
           DXSDK_DIR=${MINGW_PREFIX}/${MINGW_CHOST} cmake -G "Ninja" -B build 
@@ -64,4 +66,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          powershell
           sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
