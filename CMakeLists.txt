@@ -44,6 +44,7 @@ find_package(Python 3.11 COMPONENTS Interpreter Development REQUIRED)
 # Manually add all headers and sources here since this is a relatively small project
 set(PROJECT_SOURCES
     forms/mainwindow.ui
+    forms/relieffundsdialog.ui
 
 
     headers/databridge.h
@@ -51,6 +52,7 @@ set(PROJECT_SOURCES
     headers/mainwindow.h
     headers/maprenderer.h
     headers/drawing.h
+    headers/relieffundsdialog.h
 
     headers/rendereropenglwidget.h
     source/rendereropenglwidget.cpp
@@ -61,6 +63,7 @@ set(PROJECT_SOURCES
     source/mainwindow.cpp
     source/maprenderer.cpp
     source/drawing.cpp
+    source/relieffundsdialog.cpp
 )
 
 # Just in case compiling with Qt6 in the future
