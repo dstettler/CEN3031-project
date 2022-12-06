@@ -13,10 +13,17 @@ class ReliefFundsDialog : public QDialog
 
 public:
     explicit ReliefFundsDialog(QWidget *parent = nullptr);
+
     ~ReliefFundsDialog();
+
+private Q_SLOTS:
+    void on_RedCrossButton_clicked();
+    void on_DirectReliefButton_clicked();
+    void on_DisasterFundButton_clicked();
 
 private:
     Ui::ReliefFundsDialog *ui;
+
 };
 
 #endif // RELIEFFUNDSDIALOG_H
