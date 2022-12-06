@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::windowShown, this, &MainWindow::onWindowShown);
     
     windowShownSwitch = false;
+
+    ui->pushButton->setFocusPolicy(Qt::NoFocus);
 }
 
 void MainWindow::show()
@@ -35,19 +37,19 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (windowShownSwitch && event)
     {
-        if (event->type() == QKeyEvent::KeyPress && event->key() == Qt::Key_Up)
+        if (event->type() == QKeyEvent::KeyPress && (event->key() == Qt::Key_Up || event->key() == Qt::Key_W))
         {
             osmHandler->moveUp();
         }
-        else if (event->type() == QKeyEvent::KeyPress && event->key() == Qt::Key_Down)
+        else if (event->type() == QKeyEvent::KeyPress && (event->key() == Qt::Key_Down || event->key() == Qt::Key_S))
         {
             osmHandler->moveDown();
         }
-        else if (event->type() == QKeyEvent::KeyPress && event->key() == Qt::Key_Left)
+        else if (event->type() == QKeyEvent::KeyPress && (event->key() == Qt::Key_Left || event->key() == Qt::Key_A))
         {
             osmHandler->moveLeft();
         }
-        else if (event->type() == QKeyEvent::KeyPress && event->key() == Qt::Key_Right)
+        else if (event->type() == QKeyEvent::KeyPress && (event->key() == Qt::Key_Right || event->key() == Qt::Key_D))
         {
             osmHandler->moveRight();
         }
@@ -68,6 +70,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         mapRenderer.updateImage();
     }
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    // Relief funds window will be launched here
+}
+
 
 void MainWindow::onWindowShown()
 {
