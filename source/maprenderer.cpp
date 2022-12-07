@@ -9,7 +9,7 @@ MapRenderer::MapRenderer()
 {
     // Temporary layers
     QPixmap _baseLayer(10,10);
-
+   
     for (int i = 0; i < 4; i++)
     {
         addLayer(_baseLayer);

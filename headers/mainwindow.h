@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "headers/maprenderer.h"
+#include "headers/libosmhandler.h"
+
+#include <QMainWindow>
+#include <QSharedPointer>
 #include <QSharedPointer>
 #include "headers/databridge.h"
 #include "headers/drawing.h"
@@ -23,11 +26,20 @@ public:
 public Q_SLOTS:
     void onWindowShown();
 
+private Q_SLOTS:
+    void on_pushButton_clicked() const;
+
 Q_SIGNALS:
     void windowShown();
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 private:
     MapRenderer mapRenderer;
+    QSharedPointer<LibOsmHandler> osmHandler;
+
+    bool windowShownSwitch;
 
     //DataBridge Pointer
     QSharedPointer<DataBridge> dataBridge;
