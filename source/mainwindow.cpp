@@ -96,14 +96,9 @@ void MainWindow::onWindowShown()
     mapRenderer.updateOpenGLNode(QSharedPointer<RendererOpenGLWidget>(ui->openGLWidget));
     mapRenderer.updateImage();
 
-    QString buildPath = QDir::currentPath();
-
     // For some reason std::locale can crash if the locale cannot be found
     // (i.e. in a debugger), so calling this here to expedite the inevitable
     std::string localeStr = std::locale("").name();
-
-    osmHandler = QSharedPointer<LibOsmHandler>(new LibOsmHandler(buildPath, &mapRenderer));
-
     
     //For Mac
     #ifdef Q_OS_MACX
@@ -129,6 +124,8 @@ void MainWindow::onWindowShown()
      * You have to move the file manually into a folder called build-hurrigators-project...etc, (PICK MOST RECENT DATE) same level as hurrigators-project
      * Make sure to also change the function call under databridge.cpp
     */
+
+    osmHandler = QSharedPointer<LibOsmHandler>(new LibOsmHandler(_fileName, &mapRenderer));
 
     //Making dataBridge point to DataBridge instance
     dataBridge = QSharedPointer<DataBridge> (new DataBridge(_fileName, &mapRenderer));
