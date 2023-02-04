@@ -1,0 +1,2 @@
+# Hide archive file from linguist analysis (so the project appears as C++ and not HTML)
+lib/nhc-crawler/archive.html -linguist-vendored
